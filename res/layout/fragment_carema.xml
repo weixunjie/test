@@ -1,0 +1,19 @@
+
+<FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+    
+
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+   <cn.cloudwalk.localsdkdemo.camera.CameraPreview
+       android:id="@+id/fccpv"
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent" />
+
+  <cn.cloudwalk.localsdkdemo.view.FaceView
+
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+            android:id="@+id/fcfv"
+             />
+
+</FrameLayout>

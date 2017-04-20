@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">com.jld.faceindeniity.app</string>
+    <string name="app_name">吉隆的人脸识别系统</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="xiancz">现场照</string>
+    <string name="zhengjz">证件照</string>
+    <string name="fazhi">对比阀值：</string>
+    <string name="xulehao"> 序列号：</string>
+    <string name="shihouscsj">   是否上传数据</string>
 
 </resources>

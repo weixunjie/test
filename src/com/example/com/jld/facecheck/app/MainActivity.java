@@ -1,5 +1,13 @@
 package com.example.com.jld.facecheck.app;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+
 import com.sam.sdticreader.WltDec;
 import com.sdt.Common;
 import com.sdt.Sdtapi;
@@ -15,25 +23,29 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.os.Build;
+
 
 class IdCardMsg {
 	public String name;
@@ -66,6 +78,7 @@ public class MainActivity extends Activity {
 
 	byte[] bestFaceData = null;
 
+	private Context mContext;
 	byte[] IdCarImg = null;
 
 	String TAG = "MainActive";
@@ -88,8 +101,8 @@ public class MainActivity extends Activity {
 	Sdtapi sdta;
 
 	private TextView tb;
-	private ImageView iv;
-	private ImageView ivId;
+	private ImageView ivIdCard;
+	private ImageView ivImageNow;
 	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 
 		public void onReceive(Context context, Intent intent) {
@@ -118,11 +131,49 @@ public class MainActivity extends Activity {
 		}
 	};
 
+	private void playVoice(String fileName) {
+		try {
+			AssetManager assetManager = this.getAssets();
+			AssetFileDescriptor afd = assetManager.openFd(fileName);
+			MediaPlayer player = new MediaPlayer();
+			player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
+					afd.getLength());
+			player.setLooping(false);// 循环播放
+			player.prepare();
+			player.start();
+
+		} catch (Exception ex) {
+
+		}
+	}
+	
+	private String xm="魏屉灯";
+	private String xb="男";
+	private String idcar="445224198309285193";
+
+	private String csny="198309";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+
+		SharedPreferences sharedPreferences = getSharedPreferences(
+				"jdlfaceapp", Context.MODE_PRIVATE); // 私有数据
+		
+		
+		
+	
+	 	//String isSave=sharedPreferences.getString(, "")
+
+		mContext = this;
+
+		
+		
+		requestWindowFeature(Window.FEATURE_NO_TITLE); 
+	       /*set it to be full screen*/ 
+	        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,    
+	        WindowManager.LayoutParams.FLAG_FULLSCREEN); 
+			setContentView(R.layout.activity_main);
 
 		DisplayMetrics localDisplayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
@@ -140,6 +191,9 @@ public class MainActivity extends Activity {
 		filter.addAction(common.ACTION_USB_PERMISSION);// �Զ����USB�豸������Ȩ
 		registerReceiver(mUsbReceiver, filter);
 		findloop = true;
+
+	
+
 
 		try {
 			sdta = new Sdtapi(this);
@@ -162,12 +216,102 @@ public class MainActivity extends Activity {
 
 		}
 
-		tb = (TextView) this.findViewById(R.id.textView1);
-		iv = (ImageView) this.findViewById(R.id.ivView);
-		ivId = (ImageView) this.findViewById(R.id.imgIdCard);
-		readTread.start();
+		ivIdCard = (ImageView) this.findViewById(R.id.ivIdCard);
+		ivImageNow = (ImageView) this.findViewById(R.id.ivImageNow);
+		 readTread.start();
 	}
+	
+	public class ThreadExtendsThread extends Thread {  
+	    //static int count =10;  
+	    public void run()  
+	    {  
+	    	uploadRec(xm,xb,idcar,csny) ; 
+	    }  
+	    
+	}
+	
+	
+	private void uploadRec(String xm,String xb,String idNumber,String csny)  {
+		// 命名空间
+		String nameSpace = "http://mobilewebservice.infomgr.xjpuhui.com";
+		// 调用的方法名称
+		String methodName = "saveOldVisitor";
+		// EndPoint
+		String endPoint = "http://124.117.209.131:38203/services/IServiceMrg";
 
+ 
+        
+		// 指定WebService的命名空间和调用的方法名
+		SoapObject rpc = new SoapObject(nameSpace, methodName);
+
+		SimpleDateFormat myFmt2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		Date now = new Date();
+
+		rpc.addProperty("xm", xm);
+
+		rpc.addProperty("xb",xb);
+		
+
+		rpc.addProperty("mz", "汉");
+
+		rpc.addProperty("csrq", csny);
+		
+		rpc.addProperty("zz","" );
+		
+		rpc.addProperty("sfz", idNumber);
+		
+		rpc.addProperty("qfjg", "");
+		
+		rpc.addProperty("photo", "");
+		
+		// 设置需调用WebService接口需要传入的两个参数mobileCode、userId
+		rpc.addProperty("intime", myFmt2.format(now));
+
+		rpc.addProperty("carid", "");
+		rpc.addProperty("yxq_s", "");
+		rpc.addProperty("yxq_e", "");
+
+
+		
+		rpc.addProperty("inout", "");
+
+		
+
+		rpc.addProperty("customTransferCode", "SEQ65290120170402278742");
+
+	
+	 
+	         
+	// 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER11);
+
+		envelope.bodyOut = rpc;
+	
+		// 等价于envelope.bodyOut = rpc;
+		envelope.setOutputSoapObject(rpc);
+
+		HttpTransportSE transport = new HttpTransportSE(endPoint);
+		try {
+			// 调用WebService
+			transport.call(null, envelope,null);
+		} catch (Exception e) {
+			
+			Log.e("2222222","upload date err:");
+			e.printStackTrace();
+		}
+
+		// 获取返回的数据
+		SoapObject object = (SoapObject) envelope.bodyIn;
+		// 获取返回的结果
+		String result = object.getProperty(0).toString();
+
+		Log.e("222222", result);
+		// 将WebService返回的结果显示在TextView中
+		// resultView.setText(result);
+	}
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -177,59 +321,63 @@ public class MainActivity extends Activity {
 	Thread readTread = new Thread() {
 		public void run() {
 			while (findloop) {
-				int ret = sdta.SDT_StartFindIDCard();
-				String show;
-				if (ret == 0x9f)// 找卡成功
-				{
-					ret = sdta.SDT_SelectIDCard();
-					if (ret == 0x90) // 选卡成功
-					{
-						IdCardMsg cardmsg = new IdCardMsg();
-
-						ret = ReadBaseMsgToStr(cardmsg);
-
-						if (ret == 0x90) {
-							show = "姓名:" + cardmsg.name + '\n' + "性别:"
-									+ cardmsg.sex + '\n' + "民族:"
-									+ cardmsg.nation_str + "族" + '\n' + "出生日期:"
-									+ cardmsg.birth_year + "-"
-									+ cardmsg.birth_month + "-"
-									+ cardmsg.birth_day + '\n' + "住址:"
-									+ cardmsg.address + '\n' + "身份证号码:"
-									+ cardmsg.id_num + '\n' + "签发机关:"
-									+ cardmsg.sign_office + '\n' + "有效期起始日期:"
-									+ cardmsg.useful_s_date_year + "-"
-									+ cardmsg.useful_s_date_month + "-"
-									+ cardmsg.useful_s_date_day + '\n'
-									+ "有效期截止日期:" + cardmsg.useful_e_date_year
-									+ "-" + cardmsg.useful_e_date_month + "-"
-									+ cardmsg.useful_e_date_day + '\n';
-							
-							
-							byte[] bm = cardmsg.ptoto;
-							WltDec dec = new WltDec();
-							byte[] bip = dec.decodeToBitmap(bm);
-							
-							Message msg = new Message();
-							msg.obj = bip;
-
-							handlerUI.sendMessage(msg);
-
-							
-
-						} else {
-							show = "读基本信息失败:" + String.format("0x%02x", ret);
-
-							// findloop=false;
-
-						}
-
-					
-					}// end if 找卡成功
-
-				}// end while
-
 				try {
+					int ret = sdta.SDT_StartFindIDCard();
+					String show;
+					if (ret == 0x9f)// 找卡成功
+					{
+						ret = sdta.SDT_SelectIDCard();
+						if (ret == 0x90) // 选卡成功
+						{
+							IdCardMsg cardmsg = new IdCardMsg();
+
+							ret = ReadBaseMsgToStr(cardmsg);
+
+							if (ret == 0x90) {
+								show = "姓名:" + cardmsg.name + '\n' + "性别:"
+										+ cardmsg.sex + '\n' + "民族:"
+										+ cardmsg.nation_str + "族" + '\n'
+										+ "出生日期:" + cardmsg.birth_year + "-"
+										+ cardmsg.birth_month + "-"
+										+ cardmsg.birth_day + '\n' + "住址:"
+										+ cardmsg.address + '\n' + "身份证号码:"
+										+ cardmsg.id_num + '\n' + "签发机关:"
+										+ cardmsg.sign_office + '\n'
+										+ "有效期起始日期:"
+										+ cardmsg.useful_s_date_year + "-"
+										+ cardmsg.useful_s_date_month + "-"
+										+ cardmsg.useful_s_date_day + '\n'
+										+ "有效期截止日期:"
+										+ cardmsg.useful_e_date_year + "-"
+										+ cardmsg.useful_e_date_month + "-"
+										+ cardmsg.useful_e_date_day + '\n';
+
+								
+								idcar=cardmsg.id_num;
+								xm=cardmsg.name;
+								xb=cardmsg.sex;
+								csny=cardmsg.birth_year + cardmsg.birth_month +  cardmsg.birth_day;
+								byte[] bm = cardmsg.ptoto;
+								WltDec dec = new WltDec();
+								byte[] bip = dec.decodeToBitmap(bm);
+
+								Message msg = new Message();
+								msg.obj = bip;
+
+								handlerUI.sendMessage(msg);
+
+							} else {
+								show = "读基本信息失败:"
+										+ String.format("0x%02x", ret);
+
+								// findloop=false;
+
+							}
+
+						}// end if 找卡成功
+
+					}// end while
+
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -238,7 +386,7 @@ public class MainActivity extends Activity {
 			}
 		}
 	};
-	
+
 	byte[] bip;
 	byte[] byteFace;
 	public Handler handlerUI = new Handler() {
@@ -246,34 +394,29 @@ public class MainActivity extends Activity {
 
 			tb.setText(msg.obj.toString());
 
-			 byteFace=mCaremaFragment.getRealTimeFaceByte();
-			//bestFaceData = ();
-			
-			
-			//AttributeBean b= mCaremaFragment.mCloudwalkSDK
-				//.cwGetAttriFromImgData(bestFaceData);
-			 
-			//Log.e("123", ""+ i.alignedData.length);
-			//Log.e("123",  ""+i.alignedH+"w"+i.height);
-		
-			 bip=(byte[] )msg.obj;
-		
-			
-				Bitmap bp = BitmapFactory.decodeByteArray(bip, 0, bip.length);
-				ivId.setImageBitmap(bmp(bp));
-				    
-		
-			
-			
-			if(byteFace!=null)
-			{
-			Bitmap bt = BitmapFactory.decodeByteArray(byteFace, 0,
-					byteFace.length);
-			iv.setImageBitmap(bt);
+			byteFace = mCaremaFragment.getRealTimeFaceByte();
+			// bestFaceData = ();
+
+			// AttributeBean b= mCaremaFragment.mCloudwalkSDK
+			// .cwGetAttriFromImgData(bestFaceData);
+
+			// Log.e("123", ""+ i.alignedData.length);
+			// Log.e("123", ""+i.alignedH+"w"+i.height);
+
+			bip = (byte[]) msg.obj;
+
+			Bitmap bp = BitmapFactory.decodeByteArray(bip, 0, bip.length);
+			ivIdCard.setImageBitmap(bmp(bp));
+
+			if (byteFace != null) {
+				Bitmap bt = BitmapFactory.decodeByteArray(byteFace, 0,
+						byteFace.length);
+				ivImageNow.setImageBitmap(bt);
+			} else {
+				playVoice("noface.wav");
 			}
-			
+
 			faceCompare();
-			
 
 			// mCaremaFragment.mCloudwalkSDK.get
 		}
@@ -308,10 +451,8 @@ public class MainActivity extends Activity {
 				Object localObject = mCaremaFragment.mCloudwalkSDK
 						.cwGetAttriFromImgData(byteFace);
 
-				
 				FeatureBean idCardFeature = mCaremaFragment.mCloudwalkSDK
 						.GetFeatureFromImgData(bip, true);
-	
 
 				if ((idCardFeature.ret == 0)
 						&& (((FeatureBean) localObject).ret == 0)) {
@@ -324,6 +465,16 @@ public class MainActivity extends Activity {
 
 						Log.e("123", "sssscore:"
 								+ ((VerifyBean) localObject).score);
+						
+						if (((VerifyBean) localObject).score>0.6)
+						{
+							playVoice("pass.wav");	
+							new ThreadExtendsThread().start();
+						}
+						else
+						{
+							playVoice("nopass.wav");		
+						}
 					}
 				}
 				/*

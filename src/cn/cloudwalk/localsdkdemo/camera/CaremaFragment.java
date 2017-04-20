@@ -39,8 +39,7 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	static int screenW;
 	static int layoutId;
 	MainActivity activity;
-	LocalFaceSDK cloudwalkSDK;
-
+	LocalFaceSDK mLFaceSdk;
 	
 	public LocalSDK mCloudwalkSDK ;
 	cn.cloudwalk.sdk.FaceInfo[] faceInfos;
@@ -65,21 +64,19 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	View root;
 
 	private void initCloudwalkFaceSDK() {
-		this.cloudwalkSDK = LocalFaceSDK.getInstance(this.activity);
-		this.cloudwalkSDK.cwFaceInfoCallback(this);
+		this.mLFaceSdk = LocalFaceSDK.getInstance(this.activity);
+		this.mLFaceSdk.cwFaceInfoCallback(this);
 		
 		mCloudwalkSDK  = LocalSDK.getInstance(this.activity);
 		ConStant.faceMaxSize =  500;
-		ConStant.faceMinSize = 50;
-		String key="NDkxNzExNTZhNmY2OGM3NDk5MDYyYWRjYjU0OWVlZTZmOTI5Yzdjd2F1dGhvcml6Zd7n4ubk5+fi3+fg5efm5Of+5+bk4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm6uvn6+fr5+DV5+vn6+fr593n5+bm5uQ=";
-		//String key="Mzk0NjEwY2ZmZGEzNjc4Y2ViOWQ2MjliODFjYTkxODhkNjIyZjdjd2F1dGhvcml6Zffk4ubn5+Ti3+fg5efm5Of75Obn4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm6uvn6+fr5+DV5+vn6+fr58/n5Obn5+U=";
-		ConStant.sLicence = key;
-		
+		ConStant.faceMinSize = 20;
+		String key="NDMxNjE1YzRhMTQwM2M0OTY0OTZkNzI4MThiNjU1MzAxNmRiYzFjd2F1dGhvcml6Zd7n5Obi5+fi3+fg5efm5Of+5+bi4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm1efr5+vn6+er4Ofr5+vn66vn5+fm5ubl";
+
 		// 鍒涘缓鍙ユ焺锛屽彞鏌勫彧闇�瑕佸垱寤轰竴娆�
 		mCloudwalkSDK.cwCreateHandles(key,ConStant.faceMinSize,ConStant.faceMaxSize,ConStant.sLicencePath);
 		
 		
-		this.initRet = this.cloudwalkSDK.cwInit();
+		this.initRet = this.mLFaceSdk.cwInit();
 		Log.e("123", "initCloudwalkFaceSDK ret=" + this.initRet);
 		
 	}
@@ -119,7 +116,7 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	public byte[]  getRealTimeFaceByte()
 	{
 		//TestLog.netE("yc_CloudwalkSDK", "cwGetRealtimeFace");
-	    return this.cloudwalkSDK.cwGetBestFace();
+	    return this.mLFaceSdk.cwGetBestFace();
 	}
 
 	@Deprecated
@@ -156,7 +153,7 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 
 	public void onStop() {
 		this.mPreview.cwStopCamera();
-		this.cloudwalkSDK.cwDestory();
+		this.mLFaceSdk.cwDestory();
 		super.onStop();
 	}
 

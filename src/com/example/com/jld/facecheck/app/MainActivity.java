@@ -1,5 +1,10 @@
 package com.example.com.jld.facecheck.app;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,13 +19,17 @@ import com.sdt.Sdtapi;
 
 import cn.cloudwalk.localsdkdemo.camera.CaremaFragment;
 import cn.cloudwalk.localsdkdemo.util.ImgUtil;
+import cn.cloudwalk.localsdkdemo.util.UnzipFromAssets;
 import cn.cloudwalk.sdk.AttributeBean;
 import cn.cloudwalk.sdk.FaceInfo;
 import cn.cloudwalk.sdk.FeatureBean;
 import cn.cloudwalk.sdk.VerifyBean;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -32,9 +41,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
@@ -45,7 +57,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 class IdCardMsg {
 	public String name;
@@ -100,7 +111,7 @@ public class MainActivity extends Activity {
 	public boolean findloop = true;
 	Sdtapi sdta;
 
-	private TextView tb;
+	private TextView tvRn;
 	private ImageView ivIdCard;
 	private ImageView ivImageNow;
 	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
@@ -132,48 +143,39 @@ public class MainActivity extends Activity {
 	};
 
 	private void playVoice(String fileName) {
-		try {
-			AssetManager assetManager = this.getAssets();
-			AssetFileDescriptor afd = assetManager.openFd(fileName);
-			MediaPlayer player = new MediaPlayer();
-			player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
-					afd.getLength());
-			player.setLooping(false);// 循环播放
-			player.prepare();
-			player.start();
 
-		} catch (Exception ex) {
+		Log.e("pv", fileName);
+		MediaPlayer mediaPlayer01;
+		mediaPlayer01 = MediaPlayer.create(mContext, R.raw.noface);
+		mediaPlayer01.start();
 
-		}
 	}
-	
-	private String xm="魏屉灯";
-	private String xb="男";
-	private String idcar="445224198309285193";
 
-	private String csny="198309";
+	private String xm = "魏屉灯";
+	private String xb = "男";
+	private String idcar = "445224198309285193";
+
+	private String csny = "198309";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 
+		this.loadFile();
+
 		SharedPreferences sharedPreferences = getSharedPreferences(
 				"jdlfaceapp", Context.MODE_PRIVATE); // 私有数据
-		
-		
-		
-	
-	 	//String isSave=sharedPreferences.getString(, "")
+
+		// String isSave=sharedPreferences.getString(, "")
 
 		mContext = this;
 
-		
-		
-		requestWindowFeature(Window.FEATURE_NO_TITLE); 
-	       /*set it to be full screen*/ 
-	        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,    
-	        WindowManager.LayoutParams.FLAG_FULLSCREEN); 
-			setContentView(R.layout.activity_main);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		/* set it to be full screen */
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		setContentView(R.layout.activity_main);
 
 		DisplayMetrics localDisplayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
@@ -191,9 +193,6 @@ public class MainActivity extends Activity {
 		filter.addAction(common.ACTION_USB_PERMISSION);// �Զ����USB�豸������Ȩ
 		registerReceiver(mUsbReceiver, filter);
 		findloop = true;
-
-	
-
 
 		try {
 			sdta = new Sdtapi(this);
@@ -216,22 +215,114 @@ public class MainActivity extends Activity {
 
 		}
 
+		tvRn = (TextView) this.findViewById(R.id.tvRn);
 		ivIdCard = (ImageView) this.findViewById(R.id.ivIdCard);
 		ivImageNow = (ImageView) this.findViewById(R.id.ivImageNow);
-		 readTread.start();
+		readTread.start();
 	}
-	
-	public class ThreadExtendsThread extends Thread {  
-	    //static int count =10;  
-	    public void run()  
-	    {  
-	    	uploadRec(xm,xb,idcar,csny) ; 
-	    }  
-	    
+
+	public void loadFile() {
+
+		final ProgressDialog dialog;
+		// 需要对解压包是否已经存在进行判断
+		File file = new File(
+				cn.cloudwalk.localsdkdemo.camera.ConStant.sLicencePath);
+		if (!file.exists()) {
+			dialog = ProgressDialog.show(MainActivity.this, "",
+					"正在努力加载数据，请稍等...", true);
+			// 此处将assets文件夹下的CWModels.zip文件解压到了sd卡的根目录下面
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+
+						String zipFilePath = Environment
+								.getExternalStorageDirectory()
+								+ File.separator
+								+ "CWModels.zip";
+						if (!new File(zipFilePath).exists()) {
+							assetsDataToSD(zipFilePath);// 从assets复制到根目录
+						}
+
+						UnzipFromAssets.UnZipFolder(
+								Environment.getExternalStorageDirectory()
+										+ File.separator + "CWModels.zip",
+								Environment.getExternalStorageDirectory() + "");// 解压
+
+						if (!new File(
+								cn.cloudwalk.localsdkdemo.camera.ConStant.sLicencePath)
+								.exists()) {
+							myHandler.sendEmptyMessage(1);
+						}
+
+						dialog.dismiss();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
+		}
 	}
-	
-	
-	private void uploadRec(String xm,String xb,String idNumber,String csny)  {
+
+	private Handler myHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+
+			if (msg.what == 1) {
+				new AlertDialog.Builder(MainActivity.this)
+						.setMessage("模型解压异常,请手工导入!")
+						.setNegativeButton("确定",
+								new AlertDialog.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface arg0,
+											int arg1) {
+										arg0.dismiss();
+										finish();
+									}
+								}).show();
+			}
+
+			super.handleMessage(msg);
+		}
+	};
+
+	private void assetsDataToSD(String fileName) throws IOException {
+		InputStream myInput;
+		OutputStream myOutput = new FileOutputStream(fileName);
+		myInput = this.getAssets().open("CWModels.zip");
+		byte[] buffer = new byte[1024];
+		int length = myInput.read(buffer);
+		while (length > 0) {
+			myOutput.write(buffer, 0, length);
+			length = myInput.read(buffer);
+		}
+
+		myOutput.flush();
+		myInput.close();
+		myOutput.close();
+	}
+
+	public class ThreadExtendsThread extends Thread {
+		// static int count =10;
+		public void run() {
+
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			//playVoice("s");
+			// playVoice("pass.wav");
+			// uploadRec(xm, xb, idcar, csny);
+		}
+
+	}
+
+	private void uploadRec(String xm, String xb, String idNumber, String csny) {
 		// 命名空间
 		String nameSpace = "http://mobilewebservice.infomgr.xjpuhui.com";
 		// 调用的方法名称
@@ -239,8 +330,6 @@ public class MainActivity extends Activity {
 		// EndPoint
 		String endPoint = "http://124.117.209.131:38203/services/IServiceMrg";
 
- 
-        
 		// 指定WebService的命名空间和调用的方法名
 		SoapObject rpc = new SoapObject(nameSpace, methodName);
 
@@ -250,21 +339,20 @@ public class MainActivity extends Activity {
 
 		rpc.addProperty("xm", xm);
 
-		rpc.addProperty("xb",xb);
-		
+		rpc.addProperty("xb", xb);
 
 		rpc.addProperty("mz", "汉");
 
 		rpc.addProperty("csrq", csny);
-		
-		rpc.addProperty("zz","" );
-		
+
+		rpc.addProperty("zz", "");
+
 		rpc.addProperty("sfz", idNumber);
-		
+
 		rpc.addProperty("qfjg", "");
-		
+
 		rpc.addProperty("photo", "");
-		
+
 		// 设置需调用WebService接口需要传入的两个参数mobileCode、userId
 		rpc.addProperty("intime", myFmt2.format(now));
 
@@ -272,33 +360,26 @@ public class MainActivity extends Activity {
 		rpc.addProperty("yxq_s", "");
 		rpc.addProperty("yxq_e", "");
 
-
-		
 		rpc.addProperty("inout", "");
-
-		
 
 		rpc.addProperty("customTransferCode", "SEQ65290120170402278742");
 
-	
-	 
-	         
-	// 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
+		// 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
 
 		envelope.bodyOut = rpc;
-	
+
 		// 等价于envelope.bodyOut = rpc;
 		envelope.setOutputSoapObject(rpc);
 
 		HttpTransportSE transport = new HttpTransportSE(endPoint);
 		try {
 			// 调用WebService
-			transport.call(null, envelope,null);
+			transport.call(null, envelope, null);
 		} catch (Exception e) {
-			
-			Log.e("2222222","upload date err:");
+
+			Log.e("2222222", "upload date err:");
 			e.printStackTrace();
 		}
 
@@ -311,7 +392,7 @@ public class MainActivity extends Activity {
 		// 将WebService返回的结果显示在TextView中
 		// resultView.setText(result);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -352,11 +433,11 @@ public class MainActivity extends Activity {
 										+ cardmsg.useful_e_date_month + "-"
 										+ cardmsg.useful_e_date_day + '\n';
 
-								
-								idcar=cardmsg.id_num;
-								xm=cardmsg.name;
-								xb=cardmsg.sex;
-								csny=cardmsg.birth_year + cardmsg.birth_month +  cardmsg.birth_day;
+								idcar = cardmsg.id_num;
+								xm = cardmsg.name;
+								xb = cardmsg.sex;
+								csny = cardmsg.birth_year + cardmsg.birth_month
+										+ cardmsg.birth_day;
 								byte[] bm = cardmsg.ptoto;
 								WltDec dec = new WltDec();
 								byte[] bip = dec.decodeToBitmap(bm);
@@ -392,9 +473,10 @@ public class MainActivity extends Activity {
 	public Handler handlerUI = new Handler() {
 		public void handleMessage(Message msg) {
 
-			tb.setText(msg.obj.toString());
+			// tb.setText(msg.obj.toString());
 
 			byteFace = mCaremaFragment.getRealTimeFaceByte();
+
 			// bestFaceData = ();
 
 			// AttributeBean b= mCaremaFragment.mCloudwalkSDK
@@ -409,117 +491,103 @@ public class MainActivity extends Activity {
 			ivIdCard.setImageBitmap(bmp(bp));
 
 			if (byteFace != null) {
-				Bitmap bt = BitmapFactory.decodeByteArray(byteFace, 0,
-						byteFace.length);
-				ivImageNow.setImageBitmap(bt);
-			} else {
-				playVoice("noface.wav");
-			}
+				try {
 
+					Log.e("ssss", "byteFace" + byteFace.length);
+					Bitmap bt = BitmapFactory.decodeByteArray(byteFace, 0,
+							byteFace.length);
+					ivImageNow.setImageBitmap(bt);
+
+					Log.e("ssss", "byteFac1e" + byteFace.length);
+				} catch (Exception ex) {
+					Log.e("ssss", "haha no face");
+					playVoice("noface.wav");
+				}
+			} else {
+				Log.e("ssss", "haha no face");
+				playVoice("noface.wav");
+				return;
+			}
+			// playVoice("nopass.wav");
 			faceCompare();
 
-			// mCaremaFragment.mCloudwalkSDK.get
-		}
-	};
-
-	public Handler handler = new Handler() {
-		public void handleMessage(Message msg) {
-
-			switch (msg.what) {
-			case MSG_COMPARE_IMAGE:
-				faceCompare();
-				break;
-
-			default:
-				break;
-			}
 		}
 	};
 
 	public void faceCompare() {
-		new FeatureAsynTask().execute(new String[0]);
-	}
 
-	private class FeatureAsynTask extends AsyncTask<String, Integer, Void> {
-		private FeatureAsynTask() {
-		}
+		long l = System.currentTimeMillis();
 
-		@Override
-		protected Void doInBackground(String... arg0) {
-			{
-				long l = System.currentTimeMillis();
-				Object localObject = mCaremaFragment.mCloudwalkSDK
-						.cwGetAttriFromImgData(byteFace);
+		Log.e("123", "faceFeature:1");
 
-				FeatureBean idCardFeature = mCaremaFragment.mCloudwalkSDK
-						.GetFeatureFromImgData(bip, true);
+		FeatureBean faceFeature = mCaremaFragment.mCloudwalkSDK
+				.GetFeatureFromImgData(byteFace, false);
+		Log.e("123", "faceFeature:2");
+		FeatureBean idCardFeature = mCaremaFragment.mCloudwalkSDK
+				.GetFeatureFromImgData(bip, true);
+		Log.e("123", "faceFeature:3");
+		Log.e("123", "faceFeature:" + faceFeature.ret + ",idCardFeature"
+				+ idCardFeature.ret);
 
-				if ((idCardFeature.ret == 0)
-						&& (((FeatureBean) localObject).ret == 0)) {
-					VerifyBean rVerifyBean = mCaremaFragment.mCloudwalkSDK
-							.cwVerify(((FeatureBean) localObject).btFeature,
-									idCardFeature.btFeature);
-					Log.e("123", "浜鸿劯鐗瑰緛鑰楁椂:"
-							+ (System.currentTimeMillis() - l));
-					if (((VerifyBean) localObject).ret == 0) {
+		if (idCardFeature.ret == 0 && faceFeature.ret == 0) {
+			VerifyBean rVerifyBean = mCaremaFragment.mCloudwalkSDK.cwVerify(
+					faceFeature.btFeature, idCardFeature.btFeature);
 
-						Log.e("123", "sssscore:"
-								+ ((VerifyBean) localObject).score);
-						
-						if (((VerifyBean) localObject).score>0.6)
-						{
-							playVoice("pass.wav");	
-							new ThreadExtendsThread().start();
-						}
-						else
-						{
-							playVoice("nopass.wav");		
-						}
-					}
+			if (rVerifyBean.ret == 0) {
+
+				
+				Log.e("123", "sssscore:" + rVerifyBean.score);
+
+				if (rVerifyBean.score > 0.6) {
+
+					tvRn.setText("比对成功!");
+					new ThreadExtendsThread().start();
+					byteFace = null;
+					bip = null;
+					// return true;
+				} else {
+					// return false;
+					tvRn.setText("比对失败!");
 				}
-				/*
-				 * MainActivity.this.handler.sendMessage(paramVarArgs);
-				 * label285: MainActivity.this.idcardPath =
-				 * (MainActivity.this.publicFilePath + "/" +
-				 * MainActivity.this.cardInfo.getName() +
-				 * System.currentTimeMillis() + "idcard.png");
-				 * MainActivity.this.facePath =
-				 * (MainActivity.this.publicFilePath + "/" +
-				 * MainActivity.this.cardInfo.getName() +
-				 * System.currentTimeMillis() + "face.png");
-				 * ImgUtil.saveJPGE_After(MainActivity.this.cardInfo.getPhoto(),
-				 * MainActivity.this.idcardPath, 80);
-				 * ImgUtil.saveJPGE_After(MainActivity.this.bestFace,
-				 * MainActivity.this.facePath, 80); if (MainActivity.this.db ==
-				 * null) { MainActivity.this.db =
-				 * x.getDb(MainActivity.this.daoConfig); } paramVarArgs = new
-				 * VerifyLog(); paramVarArgs.name =
-				 * MainActivity.this.cardInfo.getName(); paramVarArgs.idNo =
-				 * MainActivity.this.cardInfo.getNumber(); paramVarArgs.score =
-				 * (MainActivity.this.score + ""); paramVarArgs.time =
-				 * (System.currentTimeMillis() + ""); paramVarArgs.faceJpgPath =
-				 * MainActivity.this.facePath; paramVarArgs.idJpgPath =
-				 * MainActivity.this.idcardPath; try {
-				 * MainActivity.this.db.saveBindingId(paramVarArgs);
-				 * MainActivity.this.handler.sendEmptyMessage(16); return null;
-				 * paramVarArgs.what = 4; continue; paramVarArgs.what = 5;
-				 * MainActivity.this.handler.sendMessage(paramVarArgs); break
-				 * label285; paramVarArgs.what = 5;
-				 * MainActivity.this.handler.sendMessage(paramVarArgs);
-				 * Log.e("123", "璇佷欢鐓ф瘮瀵归敊璇爜:" + MainActivity.this.score);
-				 * break label285; paramVarArgs.what = 5;
-				 * MainActivity.this.handler.sendMessage(paramVarArgs);
-				 * Log.e("123", "璇佷欢鐓�/鏈�浣充汉鑴哥壒寰侀敊璇爜:" + localFeatureBean.ret +
-				 * "/" + ((FeatureBean)localObject).ret); } catch (DbException
-				 * paramVarArgs) { for (;;) { Log.e("123", "dbsave閿欒:" +
-				 * paramVarArgs.getMessage()); paramVarArgs.printStackTrace(); }
-				 * } } }
-				 */
-
 			}
-			return null;
 		}
+
 	}
+
+	/*
+	 * MainActivity.this.handler.sendMessage(paramVarArgs); label285:
+	 * MainActivity.this.idcardPath = (MainActivity.this.publicFilePath + "/" +
+	 * MainActivity.this.cardInfo.getName() + System.currentTimeMillis() +
+	 * "idcard.png"); MainActivity.this.facePath =
+	 * (MainActivity.this.publicFilePath + "/" +
+	 * MainActivity.this.cardInfo.getName() + System.currentTimeMillis() +
+	 * "face.png");
+	 * ImgUtil.saveJPGE_After(MainActivity.this.cardInfo.getPhoto(),
+	 * MainActivity.this.idcardPath, 80);
+	 * ImgUtil.saveJPGE_After(MainActivity.this.bestFace,
+	 * MainActivity.this.facePath, 80); if (MainActivity.this.db == null) {
+	 * MainActivity.this.db = x.getDb(MainActivity.this.daoConfig); }
+	 * paramVarArgs = new VerifyLog(); paramVarArgs.name =
+	 * MainActivity.this.cardInfo.getName(); paramVarArgs.idNo =
+	 * MainActivity.this.cardInfo.getNumber(); paramVarArgs.score =
+	 * (MainActivity.this.score + ""); paramVarArgs.time =
+	 * (System.currentTimeMillis() + ""); paramVarArgs.faceJpgPath =
+	 * MainActivity.this.facePath; paramVarArgs.idJpgPath =
+	 * MainActivity.this.idcardPath; try {
+	 * MainActivity.this.db.saveBindingId(paramVarArgs);
+	 * MainActivity.this.handler.sendEmptyMessage(16); return null;
+	 * paramVarArgs.what = 4; continue; paramVarArgs.what = 5;
+	 * MainActivity.this.handler.sendMessage(paramVarArgs); break label285;
+	 * paramVarArgs.what = 5;
+	 * MainActivity.this.handler.sendMessage(paramVarArgs); Log.e("123",
+	 * "璇佷欢鐓ф瘮瀵归敊璇爜:" + MainActivity.this.score); break label285;
+	 * paramVarArgs.what = 5;
+	 * MainActivity.this.handler.sendMessage(paramVarArgs); Log.e("123",
+	 * "璇佷欢鐓�/鏈�浣充汉鑴哥壒寰侀敊璇爜:" + localFeatureBean.ret + "/" +
+	 * ((FeatureBean)localObject).ret); } catch (DbException paramVarArgs) { for
+	 * (;;) { Log.e("123", "dbsave閿欒:" + paramVarArgs.getMessage());
+	 * paramVarArgs.printStackTrace(); } } } }
+	 */
 
 	// 字节解码函数
 	void DecodeByte(byte[] msg, char[] msg_str) throws Exception {

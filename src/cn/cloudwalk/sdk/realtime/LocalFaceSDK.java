@@ -292,14 +292,17 @@ public class LocalFaceSDK {
 
 	}
 	
+	private boolean isGettingFace=false;
 
 
 	public byte[] cwGetBestFace() {
 		
-		if (faceNum<=0)
+		if (bestFaceFrame==null)
 		{
 			return null;
 		}
+		
+		isGettingFace=true;
 
 		// TestLog.netE("yc_CloudwalkSDK", "cwGetBestFace");
 		long l = System.currentTimeMillis();
@@ -336,23 +339,26 @@ public class LocalFaceSDK {
 		tmpWidth=bestFaceWidth * d1;
 		
 		tmpHeigh=bestFaceHeight * d2;
-		
-		/*picwith = tmpWidth >= localBitmap.getWidth() - tmpX ? localBitmap
+		Log.e("2222", "tmpHeigh"+tmpHeigh+"tmpHeigh"+tmpHeigh+localBitmap.getWidth()+","+localBitmap.getHeight());
+		picwith = tmpWidth >= localBitmap.getWidth() - tmpX ? localBitmap
 				.getWidth() - tmpX
 				: tmpWidth;
 
 		piceheitgh = tmpHeigh>= localBitmap.getHeight() - tmpY ? localBitmap
 				.getHeight() - tmpY
 				: tmpHeigh;
-		// Bitmap biMap = Bitmap.createBitmap(localBitmap, tmpX, tmpY, (int)
-		// picwith, (int)piceheitgh);*/
+		 Bitmap biMap = Bitmap.createBitmap(localBitmap, tmpX, tmpY, (int)
+		 picwith, (int)piceheitgh);
 
 	//	Log.e("333", tmpX + "-" + tmpY + "-" + (int) picwith + "-"
 			//	+ (int) piceheitgh);
 
-		Bitmap biMap = Bitmap.createBitmap(localBitmap, tmpX, tmpY,
-				(int) tmpWidth, (int) tmpHeigh);
+		//Bitmap biMap = Bitmap.createBitmap(localBitmap, tmpX, tmpY,
+			//	(int) tmpWidth, (int) tmpHeigh);
 
+	//	Bitmap biMap = Bitmap.createBitmap(localBitmap, tmpX, tmpY,
+		//	(int) tmpWidth, (int) tmpHeigh);
+		
 		// double d1 = getScale(bestFaceWidth, this.bestFaceWidth,
 		// localBitmap.getWidth(), 1.5D);
 		// double d2 = getScale(bestFaceHeight, this.bestFaceHeight,
@@ -360,6 +366,8 @@ public class LocalFaceSDK {
 		// Bitmap biMap = Bitmap.createBitmap(localBitmap, bestFaceWidth,
 		// bestFaceHeight, (int)(this.bestFaceWidth * d1),
 		// (int)(this.bestFaceHeight * d2));
+			isGettingFace=false;
+	
 		return bitmapToByte(biMap, Bitmap.CompressFormat.JPEG);
 
 		// Log.e("2222", "cwGetBestFace" + (System.currentTimeMillis() - l));
@@ -453,7 +461,7 @@ public class LocalFaceSDK {
 		// faceInfos[0].eyeRight + ";" + faceInfos[0].yaw + ";" +
 		// faceInfos[0].pitch);
 	
-		if (this.faceNum > 0) {
+		if (this.faceNum > 0 && !isGettingFace) {
 			this.bestFacScore = faceInfos[0].keyptScore;
 			this.bestFaceFrame = this.mFrame;
 			this.bestFaceX = faceInfos[0].x;

@@ -2,6 +2,7 @@ eclipse.preferences.version=1
 encoding//src/cn/cloudwalk/localsdkdemo/camera/CameraConfigurationManager.java=UTF-8
 encoding//src/cn/cloudwalk/localsdkdemo/camera/CameraPreview.java=UTF-8
 encoding//src/cn/cloudwalk/localsdkdemo/camera/CaremaFragment.java=UTF-8
+encoding//src/cn/cloudwalk/localsdkdemo/camera/ConStant.java=UTF-8
 encoding//src/cn/cloudwalk/localsdkdemo/view/FaceView.java=UTF-8
 encoding//src/cn/cloudwalk/sdk/LocalSDK.java=UTF-8
 encoding//src/cn/cloudwalk/sdk/realtime/LocalFaceSDK.java=UTF-8

@@ -5,69 +5,82 @@
     android:layout_height="fill_parent"
     android:orientation="horizontal" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="20dp"
-        android:orientation="vertical" >
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
 
-        
-          <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="设置"
-                        android:textSize="30sp" />
-          
-        <CheckBox
-            android:id="@+id/cbetSettingIsUpload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/shihouscsj"
-            android:textSize="20sp" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" >
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="@string/xulehao"
-                android:textSize="20sp" />
-            
-        <EditText
-            android:id="@+id/etSettingLicence"
-            android:layout_width="912dp"
-            android:layout_height="200dp"
-            android:ems="10"
-            android:text="NDkxNzExNTZhNmY2OGM3NDk5MDYyYWRjYjU0OWVlZTZmOTI5Yzdjd2F1dGhvcml6Zd7n4ubk5+fi3+fg5efm5Of+5+bk4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm6uvn6+fr5+DV5+vn6+fr593n5+bm5uQ=" >
+                android:layout_marginTop="2dp"
+                android:text="设置"
+                android:textSize="30sp" />
 
-            <requestFocus />
-        </EditText>
-        
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:text="@string/fazhi"
-                        android:textSize="20sp" />
-                          
-        <EditText
-            android:id="@+id/etSettingCompareValue"
-            android:layout_width="400dp"
-            android:layout_height="60dp"
-            android:ems="10"
-            android:text="0.7" >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
-            <requestFocus />
-        </EditText>
-            
+                <CheckBox
+                    android:id="@+id/cbetSettingIsUpload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                
+                    android:text="@string/shihouscsj"
+                    android:textSize="20sp" />
+
+           
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="@string/fazhi"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/etSettingCompareValue"
+                    android:layout_width="250dp"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:text="0.7"
+                    android:textSize="20sp" >
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+
+                 <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/xulehao"
+                    android:textSize="20sp" />
+                 
+            <EditText
+                android:id="@+id/etSettingLicence"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:ems="10"
+                android:text="NDkxNzExNTZhNmY2OGM3NDk5MDYyYWRjYjU0OWVlZTZmOTI5Yzdjd2F1dGhvcml6Zd7n4ubk5+fi3+fg5efm5Of+5+bk4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm6uvn6+fr5+DV5+vn6+fr593n5+bm5uQ=" >
+
+                <requestFocus />
+            </EditText>
+
             <Button
                 android:id="@+id/btnSettingSave"
-                android:layout_width="158dp"
+                android:layout_width="258dp"
                 android:layout_height="wrap_content"
                 android:text="保存" />
-            
-    </LinearLayout>  
-
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

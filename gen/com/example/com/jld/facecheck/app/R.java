@@ -38,8 +38,8 @@ public final class R {
         public static final int cameraPreview=0x7f0a0002;
         public static final int cbetSettingIsUpload=0x7f0a0005;
         public static final int container=0x7f0a0000;
-        public static final int etSettingCompareValue=0x7f0a0007;
-        public static final int etSettingLicence=0x7f0a0006;
+        public static final int etSettingCompareValue=0x7f0a0006;
+        public static final int etSettingLicence=0x7f0a0007;
         public static final int fccpv=0x7f0a000d;
         public static final int fcfv=0x7f0a000e;
         public static final int head_content_rl=0x7f0a0009;
@@ -67,6 +67,7 @@ public final class R {
         public static final int fazhi=0x7f080005;
         public static final int hello_world=0x7f080001;
         public static final int shihouscsj=0x7f080007;
+        public static final int tip_idcard=0x7f080008;
         public static final int xiancz=0x7f080003;
         public static final int xulehao=0x7f080006;
         public static final int zhengjz=0x7f080004;

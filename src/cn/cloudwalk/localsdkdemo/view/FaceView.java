@@ -90,7 +90,7 @@ public class FaceView extends View {
 		//{
 		//Log.e("22", "faceInfos"+faceNum);
 		//}
-		if (faceInfos != null ) {
+		if (faceInfos != null && faceNum>0 ) {
 
 			//for (int i = 0; i < faceNum; i++) {
 

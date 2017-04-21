@@ -49,6 +49,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -114,33 +115,27 @@ public class MainActivity extends Activity {
 	private TextView tvRn;
 	private ImageView ivIdCard;
 	private ImageView ivImageNow;
-	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-
-			// USB设备拔出广播
-			if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
-				UsbDevice device = intent
-						.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-				String deviceName = device.getDeviceName();
-				if (device != null && device.equals(deviceName)) {
-					Message msg = new Message();
-					msg.what = 2;
-					msg.obj = "USB设备拔出，应用程序即将关闭。";
-					// MyHandler.sendMessage(msg);
-
-				}
-
-			} else if (common.ACTION_USB_PERMISSION.equals(action)) {// USB设备未授权，从SDTAPI中发出的广播
-				Message msg = new Message();
-				msg.what = 3;
-				msg.obj = "USB设备无权限";
-				// MyHandler.sendMessage(msg);
-			}
-
-		}
-	};
+	/*
+	 * private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+	 * 
+	 * public void onReceive(Context context, Intent intent) { String action =
+	 * intent.getAction();
+	 * 
+	 * // USB设备拔出广播 if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
+	 * UsbDevice device = intent .getParcelableExtra(UsbManager.EXTRA_DEVICE);
+	 * String deviceName = device.getDeviceName(); if (device != null &&
+	 * device.equals(deviceName)) { Message msg = new Message(); msg.what = 2;
+	 * msg.obj = "USB设备拔出，应用程序即将关闭。"; // MyHandler.sendMessage(msg);
+	 * 
+	 * }
+	 * 
+	 * } else if (common.ACTION_USB_PERMISSION.equals(action)) {//
+	 * USB设备未授权，从SDTAPI中发出的广播 Message msg = new Message(); msg.what = 3; msg.obj
+	 * = "USB设备无权限"; // MyHandler.sendMessage(msg); }
+	 * 
+	 * } };
+	 */
 
 	private void playVoice(String fileName) {
 
@@ -164,12 +159,58 @@ public class MainActivity extends Activity {
 
 		this.loadFile();
 
+		// IntentFilter filter = new IntentFilter();// ��ͼ������
+		// filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);// USB�豸�γ�
+		// filter.addAction(common.ACTION_USB_PERMISSION);// �Զ����USB�豸������Ȩ
+		// registerReceiver(mUsbReceiver, filter);
+
 		SharedPreferences sharedPreferences = getSharedPreferences(
 				"jdlfaceapp", Context.MODE_PRIVATE); // 私有数据
 
 		// String isSave=sharedPreferences.getString(, "")
 
 		mContext = this;
+
+		String tmpString = sharedPreferences.getString(
+				Constants.LicenseKeySPName, "");
+
+		if (TextUtils.isEmpty(tmpString)) {
+			Constants.currentKey = Constants.DefaultKey;
+
+			Intent intent = new Intent();
+			intent.setClass(MainActivity.this, SettingActivity.class);
+			startActivity(intent);
+
+			finish();
+			return;
+		} else {
+			String isUpload = sharedPreferences.getString(
+					Constants.IsUploadToNetSPName, "0");
+
+			if (!TextUtils.isEmpty(isUpload) && isUpload.equals("1")) {
+
+				Constants.currentIsUploadData = true;
+			} else {
+				Constants.currentIsUploadData = false;
+			}
+
+			String strCompareVale = sharedPreferences.getString(
+					Constants.CompareValueSPName, "0.7");
+			Constants.currentKey = tmpString;
+
+			Constants.currentCompareValue = 0.7;
+			try {
+
+				Constants.currentCompareValue = Double.valueOf(strCompareVale);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
+			Log.e("111", Constants.currentCompareValue + ","
+					+ Constants.currentKey + ","
+					+ Constants.currentIsUploadData);
+
+		}
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		/* set it to be full screen */
@@ -188,10 +229,6 @@ public class MainActivity extends Activity {
 		getFragmentManager().beginTransaction()
 				.replace(R.id.cameraPreview, mCaremaFragment).commit();
 
-		IntentFilter filter = new IntentFilter();// ��ͼ������
-		filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);// USB�豸�γ�
-		filter.addAction(common.ACTION_USB_PERMISSION);// �Զ����USB�豸������Ȩ
-		registerReceiver(mUsbReceiver, filter);
 		findloop = true;
 
 		try {
@@ -216,9 +253,10 @@ public class MainActivity extends Activity {
 		}
 
 		tvRn = (TextView) this.findViewById(R.id.tvRn);
+		tvRn.setText(R.string.tip_idcard);
 		ivIdCard = (ImageView) this.findViewById(R.id.ivIdCard);
 		ivImageNow = (ImageView) this.findViewById(R.id.ivImageNow);
-		readTread.start();
+	     readTread.start();
 	}
 
 	public void loadFile() {
@@ -226,7 +264,8 @@ public class MainActivity extends Activity {
 		final ProgressDialog dialog;
 		// 需要对解压包是否已经存在进行判断
 		File file = new File(
-				cn.cloudwalk.localsdkdemo.camera.ConStant.sLicencePath);
+
+		Constants.sLicencePath);
 		if (!file.exists()) {
 			dialog = ProgressDialog.show(MainActivity.this, "",
 					"正在努力加载数据，请稍等...", true);
@@ -249,9 +288,7 @@ public class MainActivity extends Activity {
 										+ File.separator + "CWModels.zip",
 								Environment.getExternalStorageDirectory() + "");// 解压
 
-						if (!new File(
-								cn.cloudwalk.localsdkdemo.camera.ConStant.sLicencePath)
-								.exists()) {
+						if (!new File(Constants.sLicencePath).exists()) {
 							myHandler.sendEmptyMessage(1);
 						}
 
@@ -315,9 +352,9 @@ public class MainActivity extends Activity {
 				e.printStackTrace();
 			}
 
-			//playVoice("s");
+			// playVoice("s");
 			// playVoice("pass.wav");
-			 uploadRec(xm, xb, idcar, csny);
+			uploadRec(xm, xb, idcar, csny);
 		}
 
 	}
@@ -380,7 +417,15 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
 
 			Log.e("2222222", "upload date err:");
+
+			Message msg = new Message();
+
+			msg.obj = "";
+
+			handlerResultUploadMsg.sendMessage(msg);
 			e.printStackTrace();
+			return;
+
 		}
 
 		// 获取返回的数据
@@ -388,49 +433,52 @@ public class MainActivity extends Activity {
 		// 获取返回的结果
 		String result = object.getProperty(0).toString();
 
-		
-		Message msg=new Message();
-		
-		msg.obj=result;
-		
+		Message msg = new Message();
+
+		msg.obj = result;
+
 		handlerResultUploadMsg.sendMessage(msg);
-		
+
 		Log.e("222222", result);
 		// 将WebService返回的结果显示在TextView中
 		// resultView.setText(result);
 	}
-	
+
 	public Handler handlerResultUploadMsg = new Handler() {
 		public void handleMessage(Message msg) {
 
-			String rn=msg.obj.toString();
-			
-			if (rn.indexOf("成功")>=0)
+			String rn = msg.obj.toString();
+
+			if (!TextUtils.isEmpty(rn)) {
+				if (rn.indexOf("成功") >= 0) {
+					tvRn.setText("比对成功,数据已上传!");
+				} else {
+					tvRn.setText("比对成功,数据上传失败!");
+				}
+			} else
+
 			{
-			  tvRn.setText("比对成功,数据已上传!");
+				tvRn.setText("比对成功,数据上传超时!");
+
 			}
-			else
-			{
-				tvRn.setText("比对成功,数据上传失败!");
-			}	
-			
-			
-			Resources res=getResources();
 
-			Bitmap bmp=BitmapFactory.decodeResource(res, R.drawable.touxiang);
-			
+			Resources res = getResources();
+
+			Bitmap bmp = BitmapFactory.decodeResource(res, R.drawable.touxiang);
+
 			ivIdCard.setImageBitmap(bmp);
-			
-			ivImageNow.setImageBitmap(bmp);
-			
-			
 
-	}};
+			ivImageNow.setImageBitmap(bmp);
+
+		}
+	};
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(mUsbReceiver);
+		/*
+		 * if (mUsbReceiver!=null) { unregisterReceiver(mUsbReceiver); }
+		 */
 	}
 
 	Thread readTread = new Thread() {
@@ -502,26 +550,17 @@ public class MainActivity extends Activity {
 		}
 	};
 
-	byte[] bip;
+	byte[] byteIdCard;
 	byte[] byteFace;
 	public Handler handlerUI = new Handler() {
 		public void handleMessage(Message msg) {
 
-			// tb.setText(msg.obj.toString());
-
 			byteFace = mCaremaFragment.getRealTimeFaceByte();
 
-			// bestFaceData = ();
+			byteIdCard = (byte[]) msg.obj;
 
-			// AttributeBean b= mCaremaFragment.mCloudwalkSDK
-			// .cwGetAttriFromImgData(bestFaceData);
-
-			// Log.e("123", ""+ i.alignedData.length);
-			// Log.e("123", ""+i.alignedH+"w"+i.height);
-
-			bip = (byte[]) msg.obj;
-
-			Bitmap bp = BitmapFactory.decodeByteArray(bip, 0, bip.length);
+			Bitmap bp = BitmapFactory.decodeByteArray(byteIdCard, 0,
+					byteIdCard.length);
 			ivIdCard.setImageBitmap(bmp(bp));
 
 			if (byteFace != null) {
@@ -535,13 +574,11 @@ public class MainActivity extends Activity {
 					Log.e("ssss", "byteFac1e" + byteFace.length);
 				} catch (Exception ex) {
 					Log.e("ssss", "haha no face");
-					playVoice("noface.wav");
+					tvRn.setText("未检测到人脸,请重试!");
 				}
 			} else {
-				
-				
-			//	Log.e("ssss", "haha no face");
-				////playVoice("noface.wav");
+
+				tvRn.setText("未检测到人脸,请重试!");
 				return;
 			}
 			// playVoice("nopass.wav");
@@ -560,7 +597,7 @@ public class MainActivity extends Activity {
 				.GetFeatureFromImgData(byteFace, false);
 		Log.e("123", "faceFeature:2");
 		FeatureBean idCardFeature = mCaremaFragment.mCloudwalkSDK
-				.GetFeatureFromImgData(bip, true);
+				.GetFeatureFromImgData(byteIdCard, true);
 		Log.e("123", "faceFeature:3");
 		Log.e("123", "faceFeature:" + faceFeature.ret + ",idCardFeature"
 				+ idCardFeature.ret);
@@ -571,26 +608,48 @@ public class MainActivity extends Activity {
 
 			if (rVerifyBean.ret == 0) {
 
-				
 				Log.e("123", "sssscore:" + rVerifyBean.score);
 
-				if (rVerifyBean.score > 0.6) {
+				if (rVerifyBean.score > Constants.currentCompareValue) {
 
-					tvRn.setText("比对成功,数据上传中");
-					new ThreadExtendsThread().start();
+					if (Constants.currentIsUploadData) {
+						tvRn.setText("比对成功,数据上传中");
+						new ThreadExtendsThread().start();
+
+					} else
+
+					{
+						tvRn.setText("比对成功!");				
+
+						emptyImgBox();
+					}
 					byteFace = null;
-					bip = null;
+					byteIdCard = null;
 					return;
 				} else {
 					// return false;
 					tvRn.setText("比对失败!");
+					emptyImgBox();
 					return;
 				}
 			}
 		}
-		
-		 tvRn.setText("比对发生错误，请检查配置!");
 
+		tvRn.setText("比对发生错误，请检查配置!");
+		
+		emptyImgBox();
+
+	}
+	
+	private void emptyImgBox()
+	{
+		Resources res = getResources();
+		Bitmap bmp = BitmapFactory.decodeResource(res,
+				R.drawable.touxiang);
+
+		ivIdCard.setImageBitmap(bmp);
+
+		ivImageNow.setImageBitmap(bmp);;
 	}
 
 	/*

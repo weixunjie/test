@@ -3,8 +3,8 @@
     android:id="@+id/container"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+ 
     android:orientation="vertical" >
-
     
       <LinearLayout
         android:layout_width="fill_parent"
@@ -17,7 +17,7 @@
             android:layout_height="75.0px"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text=""
+            android:text="请对准"
             android:textSize="30sp" />
 
       </LinearLayout>
@@ -26,17 +26,19 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="horizontal">"
+
     <RelativeLayout
         android:id="@+id/cameraPreview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1" >
+        android:layout_marginRight="220dp" >
 
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="280dp"
+        android:layout_width="220dp"
         android:layout_height="fill_parent"
+        android:layout_marginLeft="-220dp"
         android:orientation="vertical" >
      
            <LinearLayout

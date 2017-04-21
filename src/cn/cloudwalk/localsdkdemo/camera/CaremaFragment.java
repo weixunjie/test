@@ -1,6 +1,7 @@
 package cn.cloudwalk.localsdkdemo.camera;
 
 
+import com.example.com.jld.facecheck.app.Constants;
 import com.example.com.jld.facecheck.app.MainActivity;
 
 
@@ -16,7 +17,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -45,18 +48,17 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	cn.cloudwalk.sdk.FaceInfo[] faceInfos;
 	int faceNum;
 	Handler handler = new Handler() {
-		public void handleMessage(Message paramAnonymousMessage) {
-			if (paramAnonymousMessage.what == 1) {
-				if (paramAnonymousMessage.obj!=null)
-				{
-				Object[] ojb=(Object[])paramAnonymousMessage.obj;
-				CaremaFragment.this.mFaceView.setFaces(
-						(cn.cloudwalk.sdk.FaceInfo[])ojb[0],
-						Integer.valueOf((String) ojb[1]));
-				}
+		public void handleMessage(Message msg) {
+			if (msg.what == 1) {
+				  if (msg.what == 1) {
+				        CaremaFragment.this.mFaceView.setFaces(CaremaFragment.this.faceInfos, CaremaFragment.this.faceNum);
+				      }
 			}
 		}
 	};
+	
+	
+	  
 	int initRet;
 	LayoutInflater lf;
 	FaceView mFaceView;
@@ -68,18 +70,15 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 		this.mLFaceSdk.cwFaceInfoCallback(this);
 		
 		mCloudwalkSDK  = LocalSDK.getInstance(this.activity);
-		ConStant.faceMaxSize =  500;
-		ConStant.faceMinSize = 20;
-		// laowei String key="NDkxNzExNTZhNmY2OGM3NDk5MDYyYWRjYjU0OWVlZTZmOTI5Yzdjd2F1dGhvcml6Zd7n4ubk5+fi3+fg5efm5Of+5+bk4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm6uvn6+fr5+DV5+vn6+fr593n5+bm5uQ=";
-
-		String key="NDMxNjE1YzRhMTQwM2M0OTY0OTZkNzI4MThiNjU1MzAxNmRiYzFjd2F1dGhvcml6Zd7n5Obi5+fi3+fg5efm5Of+5+bi4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm1efr5+vn6+er4Ofr5+vn66vn5+fm5ubl";  //jld
+	
 		
+	
 		// 鍒涘缓鍙ユ焺锛屽彞鏌勫彧闇�瑕佸垱寤轰竴娆�
-		mCloudwalkSDK.cwCreateHandles(key,ConStant.faceMinSize,ConStant.faceMaxSize,ConStant.sLicencePath);
+		mCloudwalkSDK.cwCreateHandles(Constants.currentKey,Constants.faceMinSize,Constants.faceMaxSize,Constants.sLicencePath);
 		
 		
 		this.initRet = this.mLFaceSdk.cwInit();
-		Log.e("123", "initCloudwalkFaceSDK ret=" + this.initRet);
+		Log.e("123", "initCloudwalkFaceSDK ret=" +Constants.currentKey+","+ this.initRet);
 		
 	}
 
@@ -118,7 +117,7 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	public byte[]  getRealTimeFaceByte()
 	{
 		//TestLog.netE("yc_CloudwalkSDK", "cwGetRealtimeFace");
-	    return this.mLFaceSdk.cwGetBestFace();
+	    return this.mLFaceSdk.cwGetRealTimeFace();
 	}
 
 	@Deprecated
@@ -178,18 +177,17 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 			this.faceInfos = faceInfos;
 			this.faceNum = faceNum;
 			if (faceNum > 8) {
-				Log.e("123", "澶т簬8faceNum=" + faceNum);
+				Log.e("123", "大于8faceNum=" + faceNum);
 			}
 		}
+		else
+		{
+			  this.faceInfos = null;
+		      this.faceNum = 0;
+		}
 		
-		Message msg=new Message();
-		msg.what=1;
-		Object[] obj=new Object[2];
-		
-		obj[0]=faceInfos;
-		obj[1]=String.valueOf(faceNum);
-		msg.obj=obj;
-		this.handler.sendMessage(msg);
+
+		this.handler.sendEmptyMessage(1);
 	
 
 	}

@@ -196,7 +196,6 @@ public class LocalFaceSDK {
 		this.frameH = frameH;
 		this.frameFormat = frameFormat;
 
-
 		this.frameAngle = cw_img_angle_t.CW_IMAGE_ANGLE_0;
 		this.frameMirror = cw_img_mirror_t.CW_IMAGE_MIRROR_HOR;
 		synchronized (lockPreview) {
@@ -281,9 +280,7 @@ public class LocalFaceSDK {
 	double getScale(int paramInt1, int paramInt2, int paramInt3,
 			double paramDouble) {
 
-	
-		while(paramInt1 + paramInt2 * paramDouble > paramInt3)
-		{
+		while (paramInt1 + paramInt2 * paramDouble > paramInt3) {
 			paramDouble -= 0.1D;
 
 		}
@@ -291,83 +288,69 @@ public class LocalFaceSDK {
 		return paramDouble;
 
 	}
-	
-	private boolean isGettingFace=false;
 
+	private boolean isGettingFace = false;
 
-	public byte[] cwGetBestFace() {
-		
-		if (bestFaceFrame==null)
-		{
-			return null;
+	public byte[] cwGetRealTimeFace() {
+
+		if (this.faceInfos==null ||  this.faceInfos.length<=0 || this.faceInfos[0]==null) {
+			return null;			
 		}
+
 		
-		isGettingFace=true;
+		
+		
+		isGettingFace = true;
 
 		// TestLog.netE("yc_CloudwalkSDK", "cwGetBestFace");
 		long l = System.currentTimeMillis();
 		Object localObject = null;
 		byte[] rn = null;
+		
+	
 
-		Bitmap localBitmap = rotaingImageView(yuv2Img(this.bestFaceFrame, 17,
+		Bitmap localBitmap = rotaingImageView(yuv2Img(this.mFrame, 17,
 				this.frameW, this.frameH, 50));
 
 		int tmpX = 0;
 		int tmpY = 0;
-		if (this.bestFaceX - this.bestFaceWidth / 4 <= 0) {
+		if (this.faceInfos[0].x - this.faceInfos[0].width / 4 <= 0) {
 
 		} else {
-			tmpX = (int) (this.bestFaceX - this.bestFaceWidth / 4);
+			tmpX = (int) (this.faceInfos[0].x - this.faceInfos[0].width / 4);
 		}
 
-		if (this.bestFaceY - this.bestFaceHeight / 2 <= 0) {
+		if (this.faceInfos[0].y - this.faceInfos[0].height / 2 <= 0) {
 
 		} else {
-			tmpY = (int) (this.bestFaceY - this.bestFaceHeight / 2);
+			tmpY = (int) (this.faceInfos[0].y - this.faceInfos[0].height / 2);
 		}
 
-		double d1 = getScale(tmpX, this.bestFaceWidth, localBitmap.getWidth(),
-				1.5D);
-		double d2 = getScale(tmpY, this.bestFaceHeight,
+		double d1 = getScale(tmpX, this.faceInfos[0].width,
+				localBitmap.getWidth(), 1.5D);
+		double d2 = getScale(tmpY, this.faceInfos[0].height,
 				localBitmap.getHeight(), 2.0D);
 
 		double picwith, piceheitgh;
 
-		
-		double tmpWidth,tmpHeigh;
-		
-		tmpWidth=bestFaceWidth * d1;
-		
-		tmpHeigh=bestFaceHeight * d2;
-		Log.e("2222", "tmpHeigh"+tmpHeigh+"tmpHeigh"+tmpHeigh+localBitmap.getWidth()+","+localBitmap.getHeight());
+		double tmpWidth, tmpHeigh;
+
+		tmpWidth = this.faceInfos[0].width * d1;
+
+		tmpHeigh = this.faceInfos[0].height * d2;
+		Log.e("2222", "tmpHeigh" + tmpHeigh + "tmpHeigh" + tmpHeigh
+				+ localBitmap.getWidth() + "," + localBitmap.getHeight());
 		picwith = tmpWidth >= localBitmap.getWidth() - tmpX ? localBitmap
-				.getWidth() - tmpX
-				: tmpWidth;
+				.getWidth() - tmpX : tmpWidth;
 
-		piceheitgh = tmpHeigh>= localBitmap.getHeight() - tmpY ? localBitmap
-				.getHeight() - tmpY
-				: tmpHeigh;
-		 Bitmap biMap = Bitmap.createBitmap(localBitmap, tmpX, tmpY, (int)
-		 picwith, (int)piceheitgh);
+		piceheitgh = tmpHeigh >= localBitmap.getHeight() - tmpY ? localBitmap
+				.getHeight() - tmpY : tmpHeigh;
+		Bitmap biMap = Bitmap.createBitmap(localBitmap, tmpX, tmpY,
+				(int) picwith, (int) piceheitgh);
 
-	//	Log.e("333", tmpX + "-" + tmpY + "-" + (int) picwith + "-"
-			//	+ (int) piceheitgh);
-
-		//Bitmap biMap = Bitmap.createBitmap(localBitmap, tmpX, tmpY,
-			//	(int) tmpWidth, (int) tmpHeigh);
-
-	//	Bitmap biMap = Bitmap.createBitmap(localBitmap, tmpX, tmpY,
-		//	(int) tmpWidth, (int) tmpHeigh);
-		
-		// double d1 = getScale(bestFaceWidth, this.bestFaceWidth,
-		// localBitmap.getWidth(), 1.5D);
-		// double d2 = getScale(bestFaceHeight, this.bestFaceHeight,
-		// localBitmap.getHeight(), 2.0D);
-		// Bitmap biMap = Bitmap.createBitmap(localBitmap, bestFaceWidth,
-		// bestFaceHeight, (int)(this.bestFaceWidth * d1),
 		// (int)(this.bestFaceHeight * d2));
-			isGettingFace=false;
-	
+		isGettingFace = false;
+
 		return bitmapToByte(biMap, Bitmap.CompressFormat.JPEG);
 
 		// Log.e("2222", "cwGetBestFace" + (System.currentTimeMillis() - l));
@@ -434,25 +417,23 @@ public class LocalFaceSDK {
 	 * @param yuv_data
 	 */
 	private void processVideoFrame(byte[] yuv_data) {
-		if (yuv_data == null || !bDetecting)
-		{
-			faceNum=0;
-			
+
+		if (this.isGettingFace) {
 			return;
-		}		
-		
+
+		}
+
+		if (yuv_data == null || !bDetecting) {
+			faceNum = 0;
+
+			return;
+		}
+
 		faceNum = cwFaceDetectTrack(yuv_data, frameW, frameH, frameFormat,
 				frameAngle, frameMirror);
 		// Long startTime = System.currentTimeMillis();
-		doBestFace();
-	}
 
-	private float bestFacScore = 0;
-	private byte[] bestFaceFrame;
-	float bestFaceX = 0;
-	float bestFaceY = 0;
-	int bestFaceWidth;
-	int bestFaceHeight;
+	}
 
 	private void doBestFace() {
 		boolean isBest = true;
@@ -460,15 +441,6 @@ public class LocalFaceSDK {
 		// faceInfos[0].mouthness + ";" + faceInfos[0].eyeLeft + ";" +
 		// faceInfos[0].eyeRight + ";" + faceInfos[0].yaw + ";" +
 		// faceInfos[0].pitch);
-	
-		if (this.faceNum > 0 && !isGettingFace) {
-			this.bestFacScore = faceInfos[0].keyptScore;
-			this.bestFaceFrame = this.mFrame;
-			this.bestFaceX = faceInfos[0].x;
-			this.bestFaceY = faceInfos[0].y;
-			this.bestFaceWidth = faceInfos[0].width;
-			this.bestFaceHeight = faceInfos[0].height;
-		}
 
 	}
 

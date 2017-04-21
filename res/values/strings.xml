@@ -8,6 +8,8 @@
     <string name="zhengjz">证件照</string>
     <string name="fazhi">对比阀值：</string>
     <string name="xulehao"> 序列号：</string>
-    <string name="shihouscsj">   是否上传数据</string>
+    <string name="shihouscsj"> 是否上传数据</string>
 
+     <string name="tip_idcard">【 请正对屏幕并刷身份证 】</string>
+        
 </resources>

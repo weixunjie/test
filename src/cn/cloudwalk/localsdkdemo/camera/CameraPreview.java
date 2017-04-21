@@ -1,5 +1,7 @@
 package cn.cloudwalk.localsdkdemo.camera;
 
+import com.example.com.jld.facecheck.app.Constants;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -10,7 +12,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
 import cn.cloudwalk.sdk.FaceInterface;
 import cn.cloudwalk.sdk.realtime.LocalFaceSDK;
 import cn.cloudwalk.sdk.realtime.CaremaType;
@@ -65,7 +66,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		this. reqPrevH= reqPrevH;
 	}
 
-	int reqPrevW=Contants.PREVIEW_W,reqPrevH=Contants.PREVIEW_H;
+	int reqPrevW=Constants.PREVIEW_W,reqPrevH=Constants.PREVIEW_H;
 
 
 	public CameraPreview(Context context) {

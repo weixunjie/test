@@ -317,7 +317,7 @@ public class MainActivity extends Activity {
 
 			//playVoice("s");
 			// playVoice("pass.wav");
-			// uploadRec(xm, xb, idcar, csny);
+			 uploadRec(xm, xb, idcar, csny);
 		}
 
 	}
@@ -388,10 +388,44 @@ public class MainActivity extends Activity {
 		// 获取返回的结果
 		String result = object.getProperty(0).toString();
 
+		
+		Message msg=new Message();
+		
+		msg.obj=result;
+		
+		handlerResultUploadMsg.sendMessage(msg);
+		
 		Log.e("222222", result);
 		// 将WebService返回的结果显示在TextView中
 		// resultView.setText(result);
 	}
+	
+	public Handler handlerResultUploadMsg = new Handler() {
+		public void handleMessage(Message msg) {
+
+			String rn=msg.obj.toString();
+			
+			if (rn.indexOf("成功")>=0)
+			{
+			  tvRn.setText("比对成功,数据已上传!");
+			}
+			else
+			{
+				tvRn.setText("比对成功,数据上传失败!");
+			}	
+			
+			
+			Resources res=getResources();
+
+			Bitmap bmp=BitmapFactory.decodeResource(res, R.drawable.touxiang);
+			
+			ivIdCard.setImageBitmap(bmp);
+			
+			ivImageNow.setImageBitmap(bmp);
+			
+			
+
+	}};
 
 	@Override
 	protected void onDestroy() {
@@ -504,8 +538,10 @@ public class MainActivity extends Activity {
 					playVoice("noface.wav");
 				}
 			} else {
-				Log.e("ssss", "haha no face");
-				playVoice("noface.wav");
+				
+				
+			//	Log.e("ssss", "haha no face");
+				////playVoice("noface.wav");
 				return;
 			}
 			// playVoice("nopass.wav");
@@ -540,17 +576,20 @@ public class MainActivity extends Activity {
 
 				if (rVerifyBean.score > 0.6) {
 
-					tvRn.setText("比对成功!");
+					tvRn.setText("比对成功,数据上传中");
 					new ThreadExtendsThread().start();
 					byteFace = null;
 					bip = null;
-					// return true;
+					return;
 				} else {
 					// return false;
 					tvRn.setText("比对失败!");
+					return;
 				}
 			}
 		}
+		
+		 tvRn.setText("比对发生错误，请检查配置!");
 
 	}
 

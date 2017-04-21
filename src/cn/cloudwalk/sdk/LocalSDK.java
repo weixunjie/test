@@ -68,8 +68,6 @@ public class LocalSDK {
 		this.faceMaxSize = faceMaxSize;
 		this.sModelPath = sModelPath;
 
-		// 鐢变簬姝emo闇�瑕佺敤鍒版娴嬶紝璇嗗埆鍜屽睘鎬у彞鏌勶紝鍥犳杩欓噷鐩存帴涓�娆℃�у垱寤轰笁涓彞鏌�
-		// 瀹為檯浣跨敤涓紝鏍规嵁闇�姹傚垱寤哄搴斿彞鏌�
 		cwCreateDetChannel();
 		cwCreateRecogHandle();
 		cwCreateAttriHandle();
@@ -143,7 +141,8 @@ public class LocalSDK {
 				return detectBean;
 			}
 		}
-		// 浜鸿劯妫�娴�
+		
+
 		int faceNum = mFaceDetTrack.cwFaceDetection(detHandle, data, width, height, format, angle, mirror, faceOp,
 				detectBean.faceInfos);
 		if (faceNum >= ERRCODE_MIN) {

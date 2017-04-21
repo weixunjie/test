@@ -310,7 +310,7 @@ public class LocalFaceSDK {
 		byte[] rn = null;
 
 		Bitmap localBitmap = rotaingImageView(yuv2Img(this.bestFaceFrame, 17,
-				this.frameW, this.frameH, 80));
+				this.frameW, this.frameH, 50));
 
 		int tmpX = 0;
 		int tmpY = 0;

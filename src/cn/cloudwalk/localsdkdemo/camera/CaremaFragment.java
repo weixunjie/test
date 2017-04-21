@@ -70,9 +70,10 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 		mCloudwalkSDK  = LocalSDK.getInstance(this.activity);
 		ConStant.faceMaxSize =  500;
 		ConStant.faceMinSize = 20;
-		//String key="NDkxNzExNTZhNmY2OGM3NDk5MDYyYWRjYjU0OWVlZTZmOTI5Yzdjd2F1dGhvcml6Zd7n4ubk5+fi3+fg5efm5Of+5+bk4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm6uvn6+fr5+DV5+vn6+fr593n5+bm5uQ=";
+		// laowei String key="NDkxNzExNTZhNmY2OGM3NDk5MDYyYWRjYjU0OWVlZTZmOTI5Yzdjd2F1dGhvcml6Zd7n4ubk5+fi3+fg5efm5Of+5+bk4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm6uvn6+fr5+DV5+vn6+fr593n5+bm5uQ=";
 
-		String key="NDMxNjE1YzRhMTQwM2M0OTY0OTZkNzI4MThiNjU1MzAxNmRiYzFjd2F1dGhvcml6Zd7n5Obi5+fi3+fg5efm5Of+5+bi4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm1efr5+vn6+er4Ofr5+vn66vn5+fm5ubl";
+		String key="NDMxNjE1YzRhMTQwM2M0OTY0OTZkNzI4MThiNjU1MzAxNmRiYzFjd2F1dGhvcml6Zd7n5Obi5+fi3+fg5efm5Of+5+bi4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm1efr5+vn6+er4Ofr5+vn66vn5+fm5ubl";  //jld
+		
 		// 鍒涘缓鍙ユ焺锛屽彞鏌勫彧闇�瑕佸垱寤轰竴娆�
 		mCloudwalkSDK.cwCreateHandles(key,ConStant.faceMinSize,ConStant.faceMaxSize,ConStant.sLicencePath);
 		

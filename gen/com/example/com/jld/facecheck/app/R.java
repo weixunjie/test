@@ -28,27 +28,30 @@ public final class R {
     public static final class drawable {
         public static final int border=0x7f020000;
         public static final int ic_launcher=0x7f020001;
-        public static final int progress_icon_1=0x7f020002;
-        public static final int progress_icon_2=0x7f020003;
-        public static final int test=0x7f020004;
-        public static final int touxiang=0x7f020005;
+        public static final int logo_big=0x7f020002;
+        public static final int progress_icon_1=0x7f020003;
+        public static final int progress_icon_2=0x7f020004;
+        public static final int test=0x7f020005;
+        public static final int touxiang=0x7f020006;
     }
     public static final class id {
-        public static final int btnSettingSave=0x7f0a0005;
-        public static final int cameraPreview=0x7f0a0002;
-        public static final int cbetSettingIsUpload=0x7f0a0006;
+        public static final int RelativeLayout1=0x7f0a0001;
+        public static final int btnSettingSave=0x7f0a0007;
+        public static final int cameraPreview=0x7f0a0004;
+        public static final int cbetSettingIsUpload=0x7f0a0008;
         public static final int container=0x7f0a0000;
-        public static final int etSettingCompareValue=0x7f0a0007;
-        public static final int etSettingLicence=0x7f0a0008;
-        public static final int fccpv=0x7f0a000d;
-        public static final int fcfv=0x7f0a000e;
-        public static final int head_content_rl=0x7f0a0009;
-        public static final int ivIdCard=0x7f0a0004;
-        public static final int ivImageNow=0x7f0a0003;
-        public static final int load=0x7f0a000b;
-        public static final int load_icon=0x7f0a000a;
-        public static final int title=0x7f0a000c;
-        public static final int tvRn=0x7f0a0001;
+        public static final int etSettingCompareValue=0x7f0a0009;
+        public static final int etSettingLicence=0x7f0a000a;
+        public static final int fccpv=0x7f0a000f;
+        public static final int fcfv=0x7f0a0010;
+        public static final int head_content_rl=0x7f0a000b;
+        public static final int imageView1=0x7f0a0002;
+        public static final int ivIdCard=0x7f0a0006;
+        public static final int ivImageNow=0x7f0a0005;
+        public static final int load=0x7f0a000d;
+        public static final int load_icon=0x7f0a000c;
+        public static final int title=0x7f0a000e;
+        public static final int tvRn=0x7f0a0003;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

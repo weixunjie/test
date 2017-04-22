@@ -199,7 +199,9 @@ public class LocalFaceSDK {
 		this.frameAngle = cw_img_angle_t.CW_IMAGE_ANGLE_0;
 		this.frameMirror = cw_img_mirror_t.CW_IMAGE_MIRROR_HOR;
 		synchronized (lockPreview) {
+
 			this.mFrame = frameData;
+
 			lockPreview.notify();
 		}
 
@@ -242,7 +244,8 @@ public class LocalFaceSDK {
 
 	private Bitmap rotaingImageView(Bitmap paramBitmap) { // Log.e("2222",
 															// "rotaingImageView"+this.caremaType
-															// );
+		// return paramBitmap;
+		// );
 
 		if (paramBitmap == null) {
 			return null;
@@ -293,24 +296,20 @@ public class LocalFaceSDK {
 
 	public byte[] cwGetRealTimeFace() {
 
-		if (this.faceInfos==null ||  this.faceInfos.length<=0 || this.faceInfos[0]==null) {
-			return null;			
+		if (this.faceInfos == null || this.faceInfos.length <= 0
+				|| this.faceInfos[0] == null) {
+			return null;
 		}
 
-		
-		
-		
 		isGettingFace = true;
 
 		// TestLog.netE("yc_CloudwalkSDK", "cwGetBestFace");
 		long l = System.currentTimeMillis();
 		Object localObject = null;
 		byte[] rn = null;
-		
-	
 
 		Bitmap localBitmap = rotaingImageView(yuv2Img(this.mFrame, 17,
-				this.frameW, this.frameH, 50));
+				this.frameW, this.frameH, 30));
 
 		int tmpX = 0;
 		int tmpY = 0;
@@ -351,7 +350,7 @@ public class LocalFaceSDK {
 		// (int)(this.bestFaceHeight * d2));
 		isGettingFace = false;
 
-		return bitmapToByte(biMap, Bitmap.CompressFormat.JPEG);
+		return bitmapToByte(localBitmap, Bitmap.CompressFormat.JPEG);
 
 		// Log.e("2222", "cwGetBestFace" + (System.currentTimeMillis() - l));
 		// return bitmapToByte(localObject, Bitmap.CompressFormat.JPEG);
@@ -417,11 +416,6 @@ public class LocalFaceSDK {
 	 * @param yuv_data
 	 */
 	private void processVideoFrame(byte[] yuv_data) {
-
-		if (this.isGettingFace) {
-			return;
-
-		}
 
 		if (yuv_data == null || !bDetecting) {
 			faceNum = 0;

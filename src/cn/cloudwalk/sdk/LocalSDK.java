@@ -10,13 +10,16 @@ package cn.cloudwalk.sdk;
 
 import java.io.File;
 
+import cn.cloudwalk.localsdkdemo.view.Cwface;
+
 import android.content.Context;
+import android.util.Log;
 
 /**
  * ClassName: CloudwalkSDK <br/>
  * Description: <br/>
  * date: 2016-4-27 涓嬪崍4:57:54 <br/>
- *
+ * 
  * @author 284891377
  * @since JDK 1.7
  */
@@ -29,7 +32,7 @@ public class LocalSDK {
 
 	/**
 	 * 鍗曚緥瀹炰緥鍖�
-	 *
+	 * 
 	 * @param mContext
 	 * @return CloudwalkSDK
 	 */
@@ -48,7 +51,7 @@ public class LocalSDK {
 
 	/**
 	 * cwInit:鍒濆鍖�. <br/>
-	 *
+	 * 
 	 * @param pLicence
 	 *            鎺堟潈鐮�
 	 * @param faceMinSize
@@ -60,9 +63,9 @@ public class LocalSDK {
 	 * @author:284891377 Date: 2016-4-22 涓嬪崍3:46:41
 	 * @since JDK 1.7
 	 */
-	
 
-	public void cwCreateHandles(String pLicence, int faceMinSize, int faceMaxSize, String sModelPath) {
+	public void cwCreateHandles(String pLicence, int faceMinSize,
+			int faceMaxSize, String sModelPath) {
 		this.pLicence = pLicence;
 		this.faceMinSize = faceMinSize;
 		this.faceMaxSize = faceMaxSize;
@@ -75,7 +78,7 @@ public class LocalSDK {
 
 	/**
 	 * cwDestory:璧勬簮閲婃斁 <br/>
-	 *
+	 * 
 	 * @author:284891377 Date: 2016-4-27 涓嬪崍5:33:14
 	 * @since JDK 1.7
 	 */
@@ -115,7 +118,8 @@ public class LocalSDK {
 		mFaceParam.maxSize = faceMaxSize;
 		mFaceParam.minSize = faceMinSize;
 		mFaceDetTrack.cwSetFaceParam(detHandle, mFaceParam);
-//		TestLog.netE(TAG, "妫�娴嬮�氶亾鑰楁椂:" + (System.currentTimeMillis() - start));
+		// TestLog.netE(TAG, "妫�娴嬮�氶亾鑰楁椂:" + (System.currentTimeMillis() -
+		// start));
 		return ret;
 	}
 
@@ -128,7 +132,8 @@ public class LocalSDK {
 	 * @return DetectBean @see cn.cloudwalk.sdk.DetectBean
 	 * @since JDK 1.7
 	 */
-	public DetectBean cwFaceDetect(byte[] data, int width, int height, int format, int angle, int mirror, int faceOp) {
+	public DetectBean cwFaceDetect(byte[] data, int width, int height,
+			int format, int angle, int mirror, int faceOp) {
 		DetectBean detectBean = new DetectBean();
 
 		// 妫�娴嬮�氶亾寤鸿鍒涘缓涓�娆�
@@ -141,31 +146,31 @@ public class LocalSDK {
 				return detectBean;
 			}
 		}
-		
 
-		int faceNum = mFaceDetTrack.cwFaceDetection(detHandle, data, width, height, format, angle, mirror, faceOp,
-				detectBean.faceInfos);
+		int faceNum = mFaceDetTrack.cwFaceDetection(detHandle, data, width,
+				height, format, angle, mirror, faceOp, detectBean.faceInfos);
 		if (faceNum >= ERRCODE_MIN) {
-			detectBean.ret = faceNum;   // 妫�娴嬪紓甯�
+			detectBean.ret = faceNum; // 妫�娴嬪紓甯�
 		} else {
-			detectBean.faceNum = faceNum;  // detectBean.faceNum涓�0琛ㄧず鏈娴嬪埌浜鸿劯
+			detectBean.faceNum = faceNum; // detectBean.faceNum涓�0琛ㄧず鏈娴嬪埌浜鸿劯
 		}
 		return detectBean;
 	}
-    /**
-     * 
-     * @param data
-     * @param width
-     * @param height
-     * @param format
-     * @param angle
-     * @param mirror
-     * @param faceOp
-     * @param faceInfos
-     * @return faceNum  faceNum>ERRCODE_MIN 閿欒鐮�
-     */
-	public int cwFaceDetect(byte[] data, int width, int height, int format, int angle, int mirror, int faceOp,
-			FaceInfo[] faceInfos) {
+
+	/**
+	 * 
+	 * @param data
+	 * @param width
+	 * @param height
+	 * @param format
+	 * @param angle
+	 * @param mirror
+	 * @param faceOp
+	 * @param faceInfos
+	 * @return faceNum faceNum>ERRCODE_MIN 閿欒鐮�
+	 */
+	public int cwFaceDetect(byte[] data, int width, int height, int format,
+			int angle, int mirror, int faceOp, FaceInfo[] faceInfos) {
 		// 妫�娴嬮�氶亾寤鸿鍒涘缓涓�娆�
 		if (detHandle == -1) {
 			int ret = cwCreateDetChannel();
@@ -174,8 +179,8 @@ public class LocalSDK {
 			}
 		}
 		// 浜鸿劯妫�娴�
-		return mFaceDetTrack.cwFaceDetection(detHandle, data, width, height, format, angle, mirror, faceOp,
-				faceInfos);
+		return mFaceDetTrack.cwFaceDetection(detHandle, data, width, height,
+				format, angle, mirror, faceOp, faceInfos);
 	}
 
 	/**
@@ -195,9 +200,9 @@ public class LocalSDK {
 		}
 		return ret;
 	}
+
 	// 浜鸿劯妫�娴�---------------------------------------
 
-	
 	// 鐗瑰緛鎻愬彇---------------------------------------
 
 	FaceRecog cwRecog = null;
@@ -214,86 +219,123 @@ public class LocalSDK {
 	 * @since JDK 1.7
 	 */
 	public int cwCreateRecogHandle() {
-//		long start = System.currentTimeMillis();
+		// long start = System.currentTimeMillis();
 		cwRecog = FaceRecog.getInstance();
 		int ret = 0;
 		// 鐗瑰緛閫氶亾寤鸿鍒涘缓涓�娆�
-		String sRecogModelPath = new StringBuilder(sModelPath).append(File.separator).append("CWR_Config_1_1.xml")
-				.toString();
+		String sRecogModelPath = new StringBuilder(sModelPath)
+				.append(File.separator).append("CWR_Config_1_1.xml").toString();
 		if (iRecogHandle == -1) {
-			iRecogHandle = cwRecog.cwCreateRecogHandle(sRecogModelPath, pLicence, 0, -1);
+			iRecogHandle = cwRecog.cwCreateRecogHandle(sRecogModelPath,
+					pLicence, 0, -1);
 		}
-		
+
 		if (iRecogHandle >= ERRCODE_MIN) {
 			ret = iRecogHandle;
-		}
-		else {
+		} else {
 			iFeaLen = cwRecog.cwGetFeatureLength(iRecogHandle);
-		}	
+		}
 
-//		TestLog.netE(TAG, "鐗瑰緛閫氶亾鑰楁椂:" + (System.currentTimeMillis() - start));
+		// TestLog.netE(TAG, "鐗瑰緛閫氶亾鑰楁椂:" + (System.currentTimeMillis() -
+		// start));
 		return ret;
 	}
-	
-	public FeatureBean GetFeatureFromImgData(byte[] imgData, boolean bFiled)
-    {  				
+
+	private int featureChannel = -1;
+
+	public FeatureBean cwGetFeature(byte[] paramArrayOfByte) {
+		FeatureBean localFeatureBean = new FeatureBean(2046, true);
+		long l = System.currentTimeMillis();
+		if ((this.featureChannel == -1) || (1401 == this.featureChannel)
+				|| (1406 == this.featureChannel)) {
+			this.featureChannel = Cwface.getInstance().cwCreateFeatureChannel(
+					this.faceMinSize, this.faceMaxSize, this.pLicence);
+		}
+		if ((1401 == this.featureChannel) || (1406 == this.featureChannel)) {
+			localFeatureBean.ret = this.featureChannel;
+		}
+		int i;
+		do {
+			// Log.e("cwGetFeature", "特征通道耗时:" + (System.currentTimeMillis() -
+			// l));
+			if (localFeatureBean.btFeature != null) {
+				localFeatureBean.btFeature = new byte[2048];
+			}
+			i = Cwface.getInstance().cwGetFeature(this.featureChannel,
+					paramArrayOfByte, paramArrayOfByte.length,
+					localFeatureBean.btFeature);
+		} while ((i != 1000) && (i != 1100) && (i != 1200));
+		localFeatureBean.ret = i;
+		return localFeatureBean;
+	}
+
+	public FeatureBean GetFeatureFromImgData(byte[] imgData, boolean bFiled) {
 		int iRet = -1;
 		// 鐗瑰緛閫氶亾寤鸿鍒涘缓涓�娆�
 		if (iRecogHandle == -1) {
 			iRet = cwCreateRecogHandle();
 		}
 		
+		Log.e("123", "cwCreateRecogHandle");
+
+
 		FeatureBean featureBean = new FeatureBean(iFeaLen, bFiled);
 		if (iRet >= ERRCODE_MIN) {
 			featureBean.ret = iRet;
 			return featureBean;
 		}
 
-    	FaceInfo[] pFaceBuffer = new FaceInfo[3]; 
-    	for (int i = 0; i < 3; i++)
-    	{
-    		pFaceBuffer[i] = new FaceInfo();
-    	}
-    	iRet = cwFaceDetect(imgData, 0, 0, FaceInterface.cw_img_form_t.CW_IMAGE_BINARY, 0, 0,
-    			FaceInterface.cw_op_t.CW_OP_DET | FaceInterface.cw_op_t.CW_OP_ALIGN, pFaceBuffer);
-    	if (iRet >= FaceInterface.cw_errcode_t.CW_EMPTY_FRAME_ERR) {
-    		
-    		featureBean.ret = iRet;
-    	}
-    	else if (iRet < 1) {
-    		
-    		featureBean.ret = -1;
-    	}
-    	else {
-    		// 鎻愬彇filed鐗瑰緛
-        	if (bFiled)
-        	{
-        		// 鎻愬彇妫�娴嬪埌鐨勭涓�寮犱汉鑴革紝涓烘渶澶т汉鑴�
-        		iRet = cwRecog.cwGetFiledFeature(iRecogHandle, pFaceBuffer[0].alignedData, pFaceBuffer[0].alignedW,  
-        				pFaceBuffer[0].alignedH, pFaceBuffer[0].nChannels, 1, featureBean.btFeature, iFeaLen);
-        	}
-        	else  // 鎻愬彇probe鐗瑰緛
-        	{
-        		iRet = cwRecog.cwGetProbeFeature(iRecogHandle, pFaceBuffer[0].alignedData, pFaceBuffer[0].alignedW,  
-        				pFaceBuffer[0].alignedH, pFaceBuffer[0].nChannels, 1, featureBean.btFeature, iFeaLen);
-        	}   	
-        	
-        	featureBean.ret = iRet;    	
-    	}
-    	
-    	return featureBean;
-    }
-	
-	
+		Log.e("123", "new FeatureBea");
+		
+		FaceInfo[] pFaceBuffer = new FaceInfo[3];
+		for (int i = 0; i < 3; i++) {
+			pFaceBuffer[i] = new FaceInfo();
+		}
+		iRet = cwFaceDetect(imgData, 0, 0,
+				FaceInterface.cw_img_form_t.CW_IMAGE_BINARY, 0, 0,
+				FaceInterface.cw_op_t.CW_OP_DET
+						| FaceInterface.cw_op_t.CW_OP_ALIGN, pFaceBuffer);
+		
+
+		Log.e("123", "new FeatureBea");
+		
+		if (iRet >= FaceInterface.cw_errcode_t.CW_EMPTY_FRAME_ERR) {
+
+			featureBean.ret = iRet;
+		} else if (iRet < 1) {
+
+			featureBean.ret = -1;
+		} else {
+			// 鎻愬彇filed鐗瑰緛
+			if (bFiled) {
+				// 鎻愬彇妫�娴嬪埌鐨勭涓�寮犱汉鑴革紝涓烘渶澶т汉鑴�
+				iRet = cwRecog.cwGetFiledFeature(iRecogHandle,
+						pFaceBuffer[0].alignedData, pFaceBuffer[0].alignedW,
+						pFaceBuffer[0].alignedH, pFaceBuffer[0].nChannels, 1,
+						featureBean.btFeature, iFeaLen);
+			} else // 鎻愬彇probe鐗瑰緛
+			{
+				iRet = cwRecog.cwGetProbeFeature(iRecogHandle,
+						pFaceBuffer[0].alignedData, pFaceBuffer[0].alignedW,
+						pFaceBuffer[0].alignedH, pFaceBuffer[0].nChannels, 1,
+						featureBean.btFeature, iFeaLen);
+			}
+
+			featureBean.ret = iRet;
+		}
+
+		return featureBean;
+	}
+
 	// 1锛�1浜鸿劯姣斿
 	public VerifyBean cwVerify(byte[] btFeaProbe, byte[] btFeaFiled) {
-		
+
 		int iRet = -1;
 		// 鐗瑰緛閫氶亾寤鸿鍒涘缓涓�娆�
 		if (iRecogHandle == -1) {
 			iRet = cwCreateRecogHandle();
 		}
-		
+
 		VerifyBean verifyBean = new VerifyBean();
 		if (iRet >= ERRCODE_MIN) {
 			verifyBean.ret = iRet;
@@ -303,34 +345,36 @@ public class LocalSDK {
 		// 浜鸿劯姣斿
 		float[] pScores = new float[1];
 		// 1:1
-		iRet = cwRecog.cwComputeMatchScore(iRecogHandle, btFeaProbe, iFeaLen, 1, btFeaFiled, iFeaLen, 1, pScores);
+		iRet = cwRecog.cwComputeMatchScore(iRecogHandle, btFeaProbe, iFeaLen,
+				1, btFeaFiled, iFeaLen, 1, pScores);
 		verifyBean.score = pScores[0];
 		verifyBean.ret = iRet;
 
 		return verifyBean;
 	}
-	
+
 	// 1锛歂浜鸿劯妫�绱�
-		public RecogBean cwRecog(byte[] btFeaProbe, byte[] btFeaFiled, int iFiledNum) {
-			
-			int iRet = -1;
-			// 鐗瑰緛閫氶亾寤鸿鍒涘缓涓�娆�
-			if (iRecogHandle == -1) {
-				iRet = cwCreateRecogHandle();
-			}
-			
-			RecogBean recogBean = new RecogBean(iFiledNum);
-			if (iRet >= ERRCODE_MIN) {
-				recogBean.ret = iRet;
-				return recogBean;
-			}
+	public RecogBean cwRecog(byte[] btFeaProbe, byte[] btFeaFiled, int iFiledNum) {
 
-			// 1:n
-			iRet = cwRecog.cwComputeMatchScore(iRecogHandle, btFeaProbe, iFeaLen, 1, btFeaFiled, iFeaLen, iFiledNum, recogBean.scores);
+		int iRet = -1;
+		// 鐗瑰緛閫氶亾寤鸿鍒涘缓涓�娆�
+		if (iRecogHandle == -1) {
+			iRet = cwCreateRecogHandle();
+		}
+
+		RecogBean recogBean = new RecogBean(iFiledNum);
+		if (iRet >= ERRCODE_MIN) {
 			recogBean.ret = iRet;
-
 			return recogBean;
 		}
+
+		// 1:n
+		iRet = cwRecog.cwComputeMatchScore(iRecogHandle, btFeaProbe, iFeaLen,
+				1, btFeaFiled, iFeaLen, iFiledNum, recogBean.scores);
+		recogBean.ret = iRet;
+
+		return recogBean;
+	}
 
 	/**
 	 * 
@@ -350,12 +394,10 @@ public class LocalSDK {
 		return ret;
 	}
 
-
-
 	// 灞炴�у垎鏋�---------------------------------------
 	FaceAttribute cwAttri = null;
 	int attributeChannel = -1;
-	
+
 	/**
 	 * 
 	 * cwCreateAttriHandle:鍒涘缓灞炴�ц瘑鍒�氶亾. <br/>
@@ -370,20 +412,21 @@ public class LocalSDK {
 
 		int ret = 0;
 		// 灞炴�ч�氶亾寤鸿鍒涘缓涓�娆�
-		String sAttriModelPath = new StringBuilder(sModelPath).append(File.separator).append("CWR_Config_attri.xml")
+		String sAttriModelPath = new StringBuilder(sModelPath)
+				.append(File.separator).append("CWR_Config_attri.xml")
 				.toString();
 		if (attributeChannel == -1) {
-			attributeChannel = cwAttri.cwCreateAttributeHandle(sAttriModelPath, pLicence, -1);
+			attributeChannel = cwAttri.cwCreateAttributeHandle(sAttriModelPath,
+					pLicence, -1);
 		}
-		
+
 		if (attributeChannel >= ERRCODE_MIN) {
 			ret = attributeChannel;
 		}
 
 		return ret;
 	}
-	
-	
+
 	/**
 	 * 
 	 * cwGetAttriFromImgData:鑾峰彇灞炴�т俊鎭紝鍖呮嫭骞撮緞鍜屾�у埆. <br/>
@@ -393,50 +436,49 @@ public class LocalSDK {
 	 * @since JDK 1.7
 	 */
 	public AttributeBean cwGetAttriFromImgData(byte[] imgData) {
-		
+
 		int iRet = -1;
 		// 灞炴�ч�氶亾寤鸿鍒涘缓涓�娆�
 		if (attributeChannel == -1) {
-			iRet =cwCreateAttriHandle();
+			iRet = cwCreateAttriHandle();
 		}
-		
+
 		AttributeBean attriBean = new AttributeBean();
 		if (iRet >= ERRCODE_MIN) {
 			attriBean.ret = iRet;
 			return attriBean;
 		}
 
-    	FaceInfo[] pFaceBuffer = new FaceInfo[3]; 
-    	for (int i = 0; i < 3; i++)
-    	{
-    		pFaceBuffer[i] = new FaceInfo();
-    	}
-    	iRet = cwFaceDetect(imgData, 0, 0, FaceInterface.cw_img_form_t.CW_IMAGE_BINARY, 0, 0,
-    			FaceInterface.cw_op_t.CW_OP_DET | FaceInterface.cw_op_t.CW_OP_ALIGN, pFaceBuffer);
-    	if (iRet >= FaceInterface.cw_errcode_t.CW_EMPTY_FRAME_ERR) {
-    		
-    		attriBean.ret = iRet;
-    	}
-    	else if (iRet < 1) {
-    		
-    		attriBean.ret = -1;
-    	}
-    	else {
-    		FaceAttrRet attr = new FaceAttrRet();
-    		iRet = cwAttri.cwGetAgeGenderEval(attributeChannel, pFaceBuffer[0].alignedData, pFaceBuffer[0].alignedW,  
-    				pFaceBuffer[0].alignedH, pFaceBuffer[0].nChannels, attr);
-    		
-    		attriBean.ret = iRet;
-    		if (iRet == 0) {
-    			attriBean.age = attr.m_iAge;
-    			attriBean.gender = attr.m_iGender;
-    		}
-    	}
-    	
+		FaceInfo[] pFaceBuffer = new FaceInfo[3];
+		for (int i = 0; i < 3; i++) {
+			pFaceBuffer[i] = new FaceInfo();
+		}
+		iRet = cwFaceDetect(imgData, 0, 0,
+				FaceInterface.cw_img_form_t.CW_IMAGE_BINARY, 0, 0,
+				FaceInterface.cw_op_t.CW_OP_DET
+						| FaceInterface.cw_op_t.CW_OP_ALIGN, pFaceBuffer);
+		if (iRet >= FaceInterface.cw_errcode_t.CW_EMPTY_FRAME_ERR) {
+
+			attriBean.ret = iRet;
+		} else if (iRet < 1) {
+
+			attriBean.ret = -1;
+		} else {
+			FaceAttrRet attr = new FaceAttrRet();
+			iRet = cwAttri.cwGetAgeGenderEval(attributeChannel,
+					pFaceBuffer[0].alignedData, pFaceBuffer[0].alignedW,
+					pFaceBuffer[0].alignedH, pFaceBuffer[0].nChannels, attr);
+
+			attriBean.ret = iRet;
+			if (iRet == 0) {
+				attriBean.age = attr.m_iAge;
+				attriBean.gender = attr.m_iGender;
+			}
+		}
+
 		return attriBean;
 	}
-	
-	
+
 	/**
 	 * 
 	 * cwDestoryAttriHandle:閿�姣佸睘鎬ц瘑鍒�氶亾. <br/>
@@ -454,10 +496,8 @@ public class LocalSDK {
 		}
 		return ret;
 	}
-	
-	
-	
-	 /**
+
+	/**
 	 * 鑾峰彇閿欒鐮佽鏄�
 	 */
 	public static String getErrMsg(int errCode) {

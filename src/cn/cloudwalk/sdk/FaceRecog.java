@@ -38,7 +38,9 @@ public class FaceRecog {
 	static public native int cwReleaseRecogHandle(int pRecogHandle);
 
 	static public native int cwGetFeatureLength(int pRecogHandle);
-	
+	  
+	  public native int cwGetFeature(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2);
+	  
 	static public native int cwGetFiledFeature(int pRecogHandle, byte[] dataAlign, int iWidth, int iHeight, int iChannels, int iAlignedFaceNum, 
 			                                   byte[] pFeatureData, int nFeatureLength);
 	

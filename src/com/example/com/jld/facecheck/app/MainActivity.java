@@ -18,6 +18,7 @@ import com.sdt.Common;
 import com.sdt.Sdtapi;
 
 import cn.cloudwalk.localsdkdemo.camera.CaremaFragment;
+import cn.cloudwalk.localsdkdemo.util.FileUtil;
 import cn.cloudwalk.localsdkdemo.util.ImgUtil;
 import cn.cloudwalk.localsdkdemo.util.UnzipFromAssets;
 import cn.cloudwalk.sdk.AttributeBean;
@@ -49,6 +50,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -137,11 +139,17 @@ public class MainActivity extends Activity {
 	 * } };
 	 */
 
-	private void playVoice(String fileName) {
+	MediaPlayer mediaPlayer01;
 
-		Log.e("pv", fileName);
-		MediaPlayer mediaPlayer01;
-		mediaPlayer01 = MediaPlayer.create(mContext, R.raw.noface);
+	private void playVoice(int fileName) {
+
+		//Log.e("pv", fileName);
+		if (mediaPlayer01 != null) {
+			mediaPlayer01.reset();
+			mediaPlayer01.release();
+		} 
+			mediaPlayer01 = MediaPlayer.create(mContext,fileName );
+		
 		mediaPlayer01.start();
 
 	}
@@ -156,8 +164,6 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-
-		this.loadFile();
 
 		// IntentFilter filter = new IntentFilter();// ��ͼ������
 		// filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);// USB�豸�γ�
@@ -212,6 +218,8 @@ public class MainActivity extends Activity {
 
 		}
 
+		this.loadFile();
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		/* set it to be full screen */
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -237,6 +245,17 @@ public class MainActivity extends Activity {
 		} catch (Exception e1) {// 捕获异常，
 
 			Log.e("LW", "Sdtapi" + e1.getCause());
+
+			try {
+
+				Thread.sleep(2000);
+
+				sdta = new Sdtapi(this);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			/*
 			 * if(e1.getCause()==null) //USB设备异常或无连接，应用程序即将关闭。 {
 			 * 
@@ -256,7 +275,7 @@ public class MainActivity extends Activity {
 		tvRn.setText(R.string.tip_idcard);
 		ivIdCard = (ImageView) this.findViewById(R.id.ivIdCard);
 		ivImageNow = (ImageView) this.findViewById(R.id.ivImageNow);
-	    readTread.start();
+		readTread.start();
 	}
 
 	public void loadFile() {
@@ -437,6 +456,7 @@ public class MainActivity extends Activity {
 
 		msg.obj = result;
 
+	
 		handlerResultUploadMsg.sendMessage(msg);
 
 		Log.e("222222", result);
@@ -462,6 +482,13 @@ public class MainActivity extends Activity {
 
 			}
 
+			
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Resources res = getResources();
 
 			Bitmap bmp = BitmapFactory.decodeResource(res, R.drawable.touxiang);
@@ -483,6 +510,7 @@ public class MainActivity extends Activity {
 
 	Thread readTread = new Thread() {
 		public void run() {
+
 			while (findloop) {
 				try {
 					int ret = sdta.SDT_StartFindIDCard();
@@ -552,6 +580,7 @@ public class MainActivity extends Activity {
 
 	byte[] byteIdCard;
 	byte[] byteFace;
+
 	public Handler handlerReadIdCardDone = new Handler() {
 		public void handleMessage(Message msg) {
 
@@ -564,6 +593,7 @@ public class MainActivity extends Activity {
 			ivIdCard.setImageBitmap(bmp(bp));
 
 			if (byteFace != null) {
+
 				try {
 
 					Log.e("ssss", "byteFace" + byteFace.length);
@@ -574,10 +604,12 @@ public class MainActivity extends Activity {
 					Log.e("ssss", "byteFac1e" + byteFace.length);
 				} catch (Exception ex) {
 					Log.e("ssss", "haha no face");
+					playVoice(R.raw.noface);
 					tvRn.setText("未检测到人脸,请重试!");
 				}
 			} else {
 
+				playVoice(R.raw.noface);
 				tvRn.setText("未检测到人脸,请重试!");
 				return;
 			}
@@ -588,16 +620,57 @@ public class MainActivity extends Activity {
 	};
 
 	public void faceCompare() {
-
+		/*
+		 * long l = System.currentTimeMillis();
+		 * 
+		 * Log.e("123", "faceFeature:1");
+		 * 
+		 * FeatureBean faceFeature = mCaremaFragment.mCloudwalkSDK
+		 * .cwGetFeature(byteFace); Log.e("123", "faceFeature:2"); FeatureBean
+		 * idCardFeature = mCaremaFragment.mCloudwalkSDK
+		 * .cwGetFeature(byteIdCard); Log.e("123", "faceFeature:3");
+		 * Log.e("123", "faceFeature:" + faceFeature.ret + ",idCardFeature" +
+		 * idCardFeature.ret);
+		 * 
+		 * if (idCardFeature.ret == 0 && faceFeature.ret == 0) { VerifyBean
+		 * rVerifyBean = mCaremaFragment.mCloudwalkSDK.cwVerify(
+		 * faceFeature.btFeature, idCardFeature.btFeature);
+		 * 
+		 * if (rVerifyBean.ret == 0) {
+		 * 
+		 * Log.e("123", "sssscore:" + rVerifyBean.score);
+		 * 
+		 * if (rVerifyBean.score > Constants.currentCompareValue) {
+		 * 
+		 * if (Constants.currentIsUploadData) { tvRn.setText("比对成功,数据上传中"); new
+		 * ThreadExtendsThread().start();
+		 * 
+		 * } else
+		 * 
+		 * { tvRn.setText("比对成功!");
+		 * 
+		 * emptyImgBox(); } byteFace = null; byteIdCard = null; return; } else {
+		 * // return false; tvRn.setText("比对失败!"); emptyImgBox(); return; } } }
+		 * 
+		 * tvRn.setText("比对发生错误，请检查配置!");
+		 * 
+		 * emptyImgBox();
+		 */
 		long l = System.currentTimeMillis();
 
 		Log.e("123", "faceFeature:1");
 
-		FeatureBean faceFeature = mCaremaFragment.mCloudwalkSDK
-				.GetFeatureFromImgData(byteFace, false);
+		FeatureBean faceFeature = null;
+
+		faceFeature = mCaremaFragment.mCloudwalkSDK.GetFeatureFromImgData(
+				byteFace, true);
+
 		Log.e("123", "faceFeature:2");
-		FeatureBean idCardFeature = mCaremaFragment.mCloudwalkSDK
-				.GetFeatureFromImgData(byteIdCard, true);
+		FeatureBean idCardFeature = null;
+
+		idCardFeature = mCaremaFragment.mCloudwalkSDK.GetFeatureFromImgData(
+				byteIdCard, false);
+
 		Log.e("123", "faceFeature:3");
 		Log.e("123", "faceFeature:" + faceFeature.ret + ",idCardFeature"
 				+ idCardFeature.ret);
@@ -613,14 +686,16 @@ public class MainActivity extends Activity {
 				if (rVerifyBean.score > Constants.currentCompareValue) {
 
 					if (Constants.currentIsUploadData) {
-						tvRn.setText("比对成功,数据上传中");
+						
+						playVoice(R.raw.pass);
+						tvRn.setText("比对成功,数据上传中...");
 						new ThreadExtendsThread().start();
 
 					} else
 
 					{
-						tvRn.setText("比对成功!");				
-
+						tvRn.setText("比对成功!");
+						playVoice(R.raw.pass);
 						emptyImgBox();
 					}
 					byteFace = null;
@@ -629,6 +704,7 @@ public class MainActivity extends Activity {
 				} else {
 					// return false;
 					tvRn.setText("比对失败!");
+					playVoice(R.raw.nopass);
 					emptyImgBox();
 					return;
 				}
@@ -636,20 +712,18 @@ public class MainActivity extends Activity {
 		}
 
 		tvRn.setText("比对发生错误，请检查配置!");
-		
+		playVoice(R.raw.nopass);
 		emptyImgBox();
 
 	}
-	
-	private void emptyImgBox()
-	{
+
+	private void emptyImgBox() {
 		Resources res = getResources();
-		Bitmap bmp = BitmapFactory.decodeResource(res,
-				R.drawable.touxiang);
+		Bitmap bmp = BitmapFactory.decodeResource(res, R.drawable.touxiang);
 
-		ivIdCard.setImageBitmap(bmp);
+		// ivIdCard.setImageBitmap(bmp);
 
-		ivImageNow.setImageBitmap(bmp);;
+		// ivImageNow.setImageBitmap(bmp);;
 	}
 
 	/*

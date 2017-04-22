@@ -84,7 +84,7 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 		int i = getResources().getConfiguration().orientation;
 		this.mPreview = ((CameraPreview) this.root.findViewById(R.id.fccpv));
 		this.mPreview.setDelegate(this);
-		this.mPreview.setScreenOrientation(i);
+	//	this.mPreview.setScreenOrientation(i);
 		this.mPreview.setCaremaId(0);
 		this.mFaceView = ((FaceView) this.root.findViewById(R.id.fcfv));
 		i = screenH;

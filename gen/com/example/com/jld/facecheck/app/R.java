@@ -34,12 +34,12 @@ public final class R {
         public static final int touxiang=0x7f020005;
     }
     public static final class id {
-        public static final int btnSettingSave=0x7f0a0008;
+        public static final int btnSettingSave=0x7f0a0005;
         public static final int cameraPreview=0x7f0a0002;
-        public static final int cbetSettingIsUpload=0x7f0a0005;
+        public static final int cbetSettingIsUpload=0x7f0a0006;
         public static final int container=0x7f0a0000;
-        public static final int etSettingCompareValue=0x7f0a0006;
-        public static final int etSettingLicence=0x7f0a0007;
+        public static final int etSettingCompareValue=0x7f0a0007;
+        public static final int etSettingLicence=0x7f0a0008;
         public static final int fccpv=0x7f0a000d;
         public static final int fcfv=0x7f0a000e;
         public static final int head_content_rl=0x7f0a0009;

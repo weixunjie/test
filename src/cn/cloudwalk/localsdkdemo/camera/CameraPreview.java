@@ -43,7 +43,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	}
 
 	//鎽勫儚澶磇d锛屽墠缃繕鏄悗缃紝榛樿鍚庣疆
-	int caremaId=Camera.CameraInfo.CAMERA_FACING_BACK;
+	int caremaId=Camera.CameraInfo.CAMERA_FACING_FRONT;
 	public int getCaremaId() {
 		return caremaId;
 	}
@@ -210,7 +210,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	@Override
 	public void onPreviewFrame(byte[] data, Camera camera) {
 
-		if (caremaId == Camera.CameraInfo.CAMERA_FACING_FRONT) {// 鍓嶇疆
+		LocalFaceSDK.getInstance(context).cwPushFrame(data, reqPrevW, reqPrevH,
+				FaceInterface.cw_img_form_t.CW_IMAGE_NV21, CaremaType.FRONT_LANDSCAPE);
+		
+		/*if (caremaId == Camera.CameraInfo.CAMERA_FACING_FRONT) {// 鍓嶇疆
 			if (Configuration.ORIENTATION_PORTRAIT == orientation) {// 绔栧睆
 																	// 姘村钩闀滃儚+鏃嬭浆90
 				LocalFaceSDK.getInstance(context).cwPushFrame(data, reqPrevW, reqPrevH,
@@ -232,7 +235,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 						FaceInterface.cw_img_form_t.CW_IMAGE_NV21, CaremaType.FRONT_LANDSCAPE);
 			}
 
-		}
+		}*/
 
 	}
 

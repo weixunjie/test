@@ -43,7 +43,7 @@
      
            <LinearLayout
                android:layout_width="160.0px"
-               android:layout_height="160.0px"
+               android:layout_height="180.0px"
                android:layout_gravity="center_vertical|center_horizontal"
                android:layout_marginLeft="1dp"
                android:background="@drawable/border"
@@ -52,7 +52,7 @@
         <ImageView
             android:id="@+id/ivImageNow"
             android:layout_width="140.0px"
-            android:layout_height="120px"
+            android:layout_height="140px"
                  android:layout_marginTop="20px"
             android:layout_gravity="center_vertical|center_horizontal|center"
             android:src="@drawable/touxiang" />
@@ -69,7 +69,7 @@
                    
          <LinearLayout
              android:layout_width="160.0px"
-             android:layout_height="160.0px"
+             android:layout_height="180.0px"
              android:layout_gravity="bottom|center_horizontal"
      
              android:layout_marginTop="5px"
@@ -79,7 +79,7 @@
         <ImageView
             android:id="@+id/ivIdCard"
                       android:layout_width="140.0px"
-            android:layout_height="120.0px"     android:layout_marginTop="20px"
+            android:layout_height="140.0px"     android:layout_marginTop="20px"
             android:layout_gravity="center_vertical|center_horizontal"
             android:src="@drawable/touxiang" />
         

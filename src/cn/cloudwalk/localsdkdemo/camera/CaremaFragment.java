@@ -1,9 +1,7 @@
 package cn.cloudwalk.localsdkdemo.camera;
 
-
 import com.example.com.jld.facecheck.app.Constants;
 import com.example.com.jld.facecheck.app.MainActivity;
-
 
 import com.example.com.jld.facecheck.app.R;
 
@@ -43,22 +41,22 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	static int layoutId;
 	MainActivity activity;
 	LocalFaceSDK mLFaceSdk;
-	
-	public LocalSDK mCloudwalkSDK ;
+
+	public LocalSDK mCloudwalkSDK;
 	cn.cloudwalk.sdk.FaceInfo[] faceInfos;
 	int faceNum;
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			if (msg.what == 1) {
-				  if (msg.what == 1) {
-				        CaremaFragment.this.mFaceView.setFaces(CaremaFragment.this.faceInfos, CaremaFragment.this.faceNum);
-				      }
+
+				mFaceView.setFaces(
+						faceInfos,
+						faceNum);
+
 			}
 		}
 	};
-	
-	
-	  
+
 	int initRet;
 	LayoutInflater lf;
 	FaceView mFaceView;
@@ -68,18 +66,18 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	private void initCloudwalkFaceSDK() {
 		this.mLFaceSdk = LocalFaceSDK.getInstance(this.activity);
 		this.mLFaceSdk.cwFaceInfoCallback(this);
-		
-		mCloudwalkSDK  = LocalSDK.getInstance(this.activity);
-	
-		
-	
+
+		mCloudwalkSDK = LocalSDK.getInstance(this.activity);
+
 		// 鍒涘缓鍙ユ焺锛屽彞鏌勫彧闇�瑕佸垱寤轰竴娆�
-		mCloudwalkSDK.cwCreateHandles(Constants.currentKey,Constants.faceMinSize,Constants.faceMaxSize,Constants.sLicencePath);
-		
-		
+		mCloudwalkSDK.cwCreateHandles(Constants.currentKey,
+				Constants.faceMinSize, Constants.faceMaxSize,
+				Constants.sLicencePath);
+
 		this.initRet = this.mLFaceSdk.cwInit();
-		Log.e("123", "initCloudwalkFaceSDK ret=" +Constants.currentKey+","+ this.initRet);
-		
+		Log.e("123", "initCloudwalkFaceSDK ret=" + Constants.currentKey + ","
+				+ this.initRet);
+
 	}
 
 	private void initView() {
@@ -98,26 +96,27 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 		this.mFaceView.setSurfaceWH(j, i, 640, 480);
 	}
 
-	public static CaremaFragment newInstance(int paramInt1, int paramInt2,int la) {
+	public static CaremaFragment newInstance(int paramInt1, int paramInt2,
+			int la) {
 		screenW = paramInt1;
 		screenH = paramInt2;
-		layoutId=la;
+		layoutId = la;
 		return new CaremaFragment();
 	}
 
 	public FaceInfo getRealTimeFace() {
 		if (this.faceNum != 0) {
-			return  this.faceInfos[this.faceNum-1];
+			return this.faceInfos[this.faceNum - 1];
 		}
 		return null;
 	}
-	
-	
-	 
-	public byte[]  getRealTimeFaceByte()
-	{
-		//TestLog.netE("yc_CloudwalkSDK", "cwGetRealtimeFace");
-	    return this.mLFaceSdk.cwGetRealTimeFace();
+
+	public byte[] getRealTimeFaceByte() {
+		if (faceNum <= 0) {
+			return null;
+		}
+		// TestLog.netE("yc_CloudwalkSDK", "cwGetRealtimeFace");
+		return this.mLFaceSdk.cwGetRealTimeFace();
 	}
 
 	@Deprecated
@@ -172,23 +171,18 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	public void detectFaceInfo(FaceInfo[] faceInfos, int faceNum) {
 		// TODO Auto-generated method stub
 
-	
 		if (faceNum > 0) {
 			this.faceInfos = faceInfos;
 			this.faceNum = faceNum;
 			if (faceNum > 8) {
 				Log.e("123", "大于8faceNum=" + faceNum);
 			}
+		} else {
+			this.faceInfos = null;
+			this.faceNum = 0;
 		}
-		else
-		{
-			  this.faceInfos = null;
-		      this.faceNum = 0;
-		}
-		
 
 		this.handler.sendEmptyMessage(1);
-	
 
 	}
 }

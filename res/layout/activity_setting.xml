@@ -37,7 +37,7 @@
                     android:text="@string/shihouscsj"
                     android:textSize="20sp" />
 
-           
+                 <requestFocus />
 
                 <TextView
                     android:layout_width="fill_parent"
@@ -54,7 +54,7 @@
                     android:text="0.7"
                     android:textSize="20sp" >
 
-                    <requestFocus />
+               
                 </EditText>
             </LinearLayout>
 
@@ -72,7 +72,7 @@
                 android:ems="10"
                 android:text="NDkxNzExNTZhNmY2OGM3NDk5MDYyYWRjYjU0OWVlZTZmOTI5Yzdjd2F1dGhvcml6Zd7n4ubk5+fi3+fg5efm5Of+5+bk4Obg5Yjm5uvl5ubrkeXm5uvl5uai6+Xm5uvl5uTm6+Xm5uDm6uvn6+fr5+DV5+vn6+fr593n5+bm5uQ=" >
 
-                <requestFocus />
+                
             </EditText>
 
             <Button

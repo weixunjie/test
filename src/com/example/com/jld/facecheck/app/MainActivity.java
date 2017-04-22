@@ -256,7 +256,7 @@ public class MainActivity extends Activity {
 		tvRn.setText(R.string.tip_idcard);
 		ivIdCard = (ImageView) this.findViewById(R.id.ivIdCard);
 		ivImageNow = (ImageView) this.findViewById(R.id.ivImageNow);
-	     readTread.start();
+	    readTread.start();
 	}
 
 	public void loadFile() {
@@ -527,7 +527,7 @@ public class MainActivity extends Activity {
 								Message msg = new Message();
 								msg.obj = bip;
 
-								handlerUI.sendMessage(msg);
+								handlerReadIdCardDone.sendMessage(msg);
 
 							} else {
 								show = "读基本信息失败:"
@@ -552,7 +552,7 @@ public class MainActivity extends Activity {
 
 	byte[] byteIdCard;
 	byte[] byteFace;
-	public Handler handlerUI = new Handler() {
+	public Handler handlerReadIdCardDone = new Handler() {
 		public void handleMessage(Message msg) {
 
 			byteFace = mCaremaFragment.getRealTimeFaceByte();

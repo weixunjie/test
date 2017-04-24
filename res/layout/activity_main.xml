@@ -49,17 +49,17 @@
             android:id="@+id/cameraPreview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginRight="220dp" >
+            android:layout_marginRight="250dp" >
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="220dp"
+            android:layout_width="250dp"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="-220dp"
+            android:layout_marginLeft="-250dp"
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_marginTop="5px"
+                android:layout_marginTop="8px"
                 android:layout_width="160.0px"
                 android:layout_height="180.0px"
                 android:layout_gravity="center_vertical|center_horizontal"
@@ -78,7 +78,7 @@
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="75.0px"
+                android:layout_height="35.0px"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="@string/xiancz"
@@ -103,10 +103,34 @@
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="75.0px"
+                android:layout_height="35.0px"
                 android:gravity="center"
                 android:text="@string/zhengjz"
                 android:textSize="20sp" />
+            
+                <TextView
+                    
+                                       android:id="@+id/tvName"
+                android:layout_width="fill_parent"
+                android:layout_height="35.0px"
+                android:layout_marginTop="10dp"
+                
+                 android:layout_marginLeft="2dp"
+                android:gravity="left"
+                android:text="姓名:在在在"
+                android:textSize="18sp" />
+                
+                
+                 <TextView
+                     
+                              android:id="@+id/tvIdCard"
+                 android:layout_marginLeft="2dp"
+                android:layout_width="fill_parent"
+                android:layout_height="35.0px"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text="身份证:44522419830928454X"
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 

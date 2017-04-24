@@ -10,7 +10,7 @@ package cn.cloudwalk.sdk;
 
 import java.io.File;
 
-import cn.cloudwalk.localsdkdemo.view.Cwface;
+
 
 import android.content.Context;
 import android.util.Log;
@@ -243,31 +243,7 @@ public class LocalSDK {
 
 	private int featureChannel = -1;
 
-	public FeatureBean cwGetFeature(byte[] paramArrayOfByte) {
-		FeatureBean localFeatureBean = new FeatureBean(2046, true);
-		long l = System.currentTimeMillis();
-		if ((this.featureChannel == -1) || (1401 == this.featureChannel)
-				|| (1406 == this.featureChannel)) {
-			this.featureChannel = Cwface.getInstance().cwCreateFeatureChannel(
-					this.faceMinSize, this.faceMaxSize, this.pLicence);
-		}
-		if ((1401 == this.featureChannel) || (1406 == this.featureChannel)) {
-			localFeatureBean.ret = this.featureChannel;
-		}
-		int i;
-		do {
-			// Log.e("cwGetFeature", "特征通道耗时:" + (System.currentTimeMillis() -
-			// l));
-			if (localFeatureBean.btFeature != null) {
-				localFeatureBean.btFeature = new byte[2048];
-			}
-			i = Cwface.getInstance().cwGetFeature(this.featureChannel,
-					paramArrayOfByte, paramArrayOfByte.length,
-					localFeatureBean.btFeature);
-		} while ((i != 1000) && (i != 1100) && (i != 1200));
-		localFeatureBean.ret = i;
-		return localFeatureBean;
-	}
+	
 
 	public FeatureBean GetFeatureFromImgData(byte[] imgData, boolean bFiled) {
 		int iRet = -1;

@@ -117,6 +117,10 @@ public class MainActivity extends Activity {
 	private TextView tvRn;
 	private ImageView ivIdCard;
 	private ImageView ivImageNow;
+	
+	private TextView tvName;
+	private TextView tvIdCar;
+	
 
 	/*
 	 * private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
@@ -275,6 +279,10 @@ public class MainActivity extends Activity {
 		tvRn.setText(R.string.tip_idcard);
 		ivIdCard = (ImageView) this.findViewById(R.id.ivIdCard);
 		ivImageNow = (ImageView) this.findViewById(R.id.ivImageNow);
+		
+		tvName = (TextView) this.findViewById(R.id.tvName);
+		
+		tvIdCar=(TextView) this.findViewById(R.id.tvIdCard);
 		readTread.start();
 	}
 
@@ -496,6 +504,11 @@ public class MainActivity extends Activity {
 			ivIdCard.setImageBitmap(bmp);
 
 			ivImageNow.setImageBitmap(bmp);
+			
+			
+
+			tvName.setText("姓名:");
+			tvIdCar.setText("身份证:");
 
 		}
 	};
@@ -592,6 +605,9 @@ public class MainActivity extends Activity {
 					byteIdCard.length);
 			ivIdCard.setImageBitmap(bmp(bp));
 
+			tvName.setText("姓名:"+xm);
+			tvIdCar.setText("身份证:"+idcar);
+			
 			if (byteFace != null) {
 
 				try {

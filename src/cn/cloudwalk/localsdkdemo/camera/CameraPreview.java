@@ -184,6 +184,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		if (mCamera != null) {
 			return;
 		}
+		
+		Log.e("222", "start comar");
 
 		try {
 			mCamera = Camera.open(caremaId);

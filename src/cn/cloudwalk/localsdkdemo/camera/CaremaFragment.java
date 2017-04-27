@@ -75,7 +75,7 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 				Constants.sLicencePath);
 
 		this.initRet = this.mLFaceSdk.cwInit();
-		Log.e("123", "initCloudwalkFaceSDK ret=" + Constants.currentKey + ","
+		Log.e("222", "initCloudwalkFaceSDK ret=" + Constants.currentKey + ","
 				+ this.initRet);
 
 	}
@@ -146,8 +146,7 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	}
 
 	public void onResume() {
-		initCloudwalkFaceSDK();
-		this.mPreview.cwStartCamera();
+	
 		super.onResume();
 	}
 
@@ -160,6 +159,11 @@ public class CaremaFragment extends Fragment implements FaceInfoCallback,
 	public void onViewCreated(View paramView, Bundle paramBundle) {
 		initView();
 		super.onViewCreated(paramView, paramBundle);
+		Log.e("222", "on onViewCreated view");
+		
+		initCloudwalkFaceSDK();
+		this.mPreview.cwStartCamera();
+		
 	}
 
 	public void setNoFace() {

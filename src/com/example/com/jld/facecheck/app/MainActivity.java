@@ -174,11 +174,25 @@ public class MainActivity extends Activity {
 		// filter.addAction(common.ACTION_USB_PERMISSION);// �Զ����USB�豸������Ȩ
 		// registerReceiver(mUsbReceiver, filter);
 
+		
+		
+
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		/* set it to be full screen */
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
+
+		setContentView(R.layout.activity_main);
+
+		
 		SharedPreferences sharedPreferences = getSharedPreferences(
 				"jdlfaceapp", Context.MODE_PRIVATE); // 私有数据
 
 		// String isSave=sharedPreferences.getString(, "")
 
+		Log.e("222", "on main created");
 		mContext = this;
 
 		String tmpString = sharedPreferences.getString(
@@ -223,12 +237,9 @@ public class MainActivity extends Activity {
 		}
 
 		this.loadFile();
+		
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		/* set it to be full screen */
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.activity_main);
+		
 
 		DisplayMetrics localDisplayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
@@ -241,6 +252,9 @@ public class MainActivity extends Activity {
 		getFragmentManager().beginTransaction()
 				.replace(R.id.cameraPreview, mCaremaFragment).commit();
 
+
+	
+
 		findloop = true;
 
 		try {
@@ -252,7 +266,7 @@ public class MainActivity extends Activity {
 
 			try {
 
-				Thread.sleep(2000);
+				Thread.sleep(3000);
 
 				sdta = new Sdtapi(this);
 			} catch (Exception e) {
@@ -286,6 +300,11 @@ public class MainActivity extends Activity {
 		readTread.start();
 	}
 
+	
+	private void fileOfater()
+	{
+		
+	}
 	public void loadFile() {
 
 		final ProgressDialog dialog;
@@ -318,6 +337,8 @@ public class MainActivity extends Activity {
 						if (!new File(Constants.sLicencePath).exists()) {
 							myHandler.sendEmptyMessage(1);
 						}
+						
+						myHandler.sendEmptyMessage(2);
 
 						dialog.dismiss();
 
@@ -326,6 +347,10 @@ public class MainActivity extends Activity {
 					}
 				}
 			}).start();
+		}
+		else
+		{
+			fileOfater();
 		}
 	}
 
@@ -346,6 +371,11 @@ public class MainActivity extends Activity {
 										finish();
 									}
 								}).show();
+			}
+			
+			if (msg.what==2)
+			{
+				fileOfater();
 			}
 
 			super.handleMessage(msg);

@@ -78,11 +78,11 @@
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="40.0px"
+                android:layout_height="35.0px"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="@string/xiancz"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="160.0px"
@@ -103,33 +103,33 @@
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="40.0px"
+                android:layout_height="35.0px"
                 android:gravity="center"
                 android:text="@string/zhengjz"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
             
                 <TextView
                     
                                        android:id="@+id/tvName"
                 android:layout_width="fill_parent"
-                android:layout_height="40.0px"
+                android:layout_height="35.0px"
                 android:layout_marginTop="10dp"
                 
-                 android:layout_marginLeft="1dp"
+                 android:layout_marginLeft="3dp"
                 android:gravity="left"
-                android:text="姓名:在在在"
+                android:text="姓名:"
                 android:textSize="18sp" />
                 
                 
                  <TextView
                      
                               android:id="@+id/tvIdCard"
-                 android:layout_marginLeft="1dp"
+                 android:layout_marginLeft="3dp"
                 android:layout_width="fill_parent"
-                android:layout_height="40.0px"
+                android:layout_height="35.0px"
                 android:layout_marginTop="10dp"
                 android:gravity="left"
-                android:text="身份证:44522419830928454X"
+                android:text="身份证:"
                 android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>

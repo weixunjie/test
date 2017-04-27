@@ -81,11 +81,13 @@ public final class R {
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
     
 
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
+
         
          */
         public static final int AppBaseTheme=0x7f090000;
@@ -97,6 +99,7 @@ public final class R {
         /**  是否半透明 
          */
         public static final int dialog_style=0x7f090002;
+        public static final int notitle=0x7f090004;
     }
     public static final class xml {
         public static final int device_filter=0x7f050000;

@@ -14,6 +14,13 @@ public final class R {
     }
     public static final class attr {
     }
+    public static final class color {
+        public static final int color_black=0x7f070001;
+        public static final int color_dark_grey=0x7f070000;
+        public static final int color_green=0x7f070002;
+        public static final int color_red=0x7f070003;
+        public static final int color_white=0x7f070004;
+    }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
 
@@ -22,8 +29,8 @@ public final class R {
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f070000;
-        public static final int activity_vertical_margin=0x7f070001;
+        public static final int activity_horizontal_margin=0x7f080000;
+        public static final int activity_vertical_margin=0x7f080001;
     }
     public static final class drawable {
         public static final int border=0x7f020000;
@@ -35,31 +42,61 @@ public final class R {
         public static final int touxiang=0x7f020006;
     }
     public static final class id {
-        public static final int RelativeLayout1=0x7f0a0001;
-        public static final int btnSettingSave=0x7f0a0009;
-        public static final int cameraPreview=0x7f0a0004;
-        public static final int cbetSettingIsUpload=0x7f0a000a;
-        public static final int container=0x7f0a0000;
-        public static final int etSettingCompareValue=0x7f0a000b;
-        public static final int etSettingLicence=0x7f0a000c;
-        public static final int fccpv=0x7f0a0011;
-        public static final int fcfv=0x7f0a0012;
-        public static final int head_content_rl=0x7f0a000d;
-        public static final int imageView1=0x7f0a0002;
-        public static final int ivIdCard=0x7f0a0006;
-        public static final int ivImageNow=0x7f0a0005;
-        public static final int load=0x7f0a000f;
-        public static final int load_icon=0x7f0a000e;
-        public static final int title=0x7f0a0010;
-        public static final int tvIdCard=0x7f0a0008;
-        public static final int tvName=0x7f0a0007;
-        public static final int tvRn=0x7f0a0003;
+        public static final int RelativeLayout1=0x7f0b0001;
+        public static final int btnSearch=0x7f0b0027;
+        public static final int btnSearchBack=0x7f0b0022;
+        public static final int btnSettingSave=0x7f0b000a;
+        public static final int cameraPreview=0x7f0b0004;
+        public static final int cbetSettingIsUpload=0x7f0b000b;
+        public static final int container=0x7f0b0000;
+        public static final int etSearchIdCard=0x7f0b0024;
+        public static final int etSearchName=0x7f0b0023;
+        public static final int etSettingCompareValue=0x7f0b000c;
+        public static final int etSettingLicence=0x7f0b000d;
+        public static final int fccpv=0x7f0b0012;
+        public static final int fcfv=0x7f0b0013;
+        public static final int head_content_rl=0x7f0b000e;
+        public static final int imageView1=0x7f0b0002;
+        public static final int ivIdCard=0x7f0b0006;
+        public static final int ivImageNow=0x7f0b0005;
+        public static final int ivSearhPopIdCard=0x7f0b002b;
+        public static final int ivSearhRealTime=0x7f0b002c;
+        public static final int listView=0x7f0b0028;
+        public static final int load=0x7f0b0010;
+        public static final int load_icon=0x7f0b000f;
+        public static final int stock_change_percentage=0x7f0b001a;
+        public static final int stock_change_price=0x7f0b0019;
+        public static final int stock_code=0x7f0b0016;
+        public static final int stock_last_price=0x7f0b0018;
+        public static final int stock_list_header_code=0x7f0b001c;
+        public static final int stock_list_header_last_price=0x7f0b001e;
+        public static final int stock_list_header_price_change=0x7f0b001f;
+        public static final int stock_list_header_price_change_percentage=0x7f0b0020;
+        public static final int stock_list_header_row=0x7f0b001b;
+        public static final int stock_list_header_symbol=0x7f0b001d;
+        public static final int stock_list_item_table_layout=0x7f0b0014;
+        public static final int stock_list_row=0x7f0b0015;
+        public static final int stock_symbol=0x7f0b0017;
+        public static final int textView1=0x7f0b0021;
+        public static final int title=0x7f0b0011;
+        public static final int tvBirthDay=0x7f0b0008;
+        public static final int tvEndDate=0x7f0b0026;
+        public static final int tvIdCard=0x7f0b0009;
+        public static final int tvName=0x7f0b0007;
+        public static final int tvRn=0x7f0b0003;
+        public static final int tvSearchPopName=0x7f0b0029;
+        public static final int tvSearhPopIdCar=0x7f0b002a;
+        public static final int tvStartDate=0x7f0b0025;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_setting=0x7f030001;
         public static final int dialog_alert=0x7f030002;
         public static final int fragment_carema=0x7f030003;
+        public static final int item=0x7f030004;
+        public static final int item_header=0x7f030005;
+        public static final int search_page=0x7f030006;
+        public static final int searchpopup=0x7f030007;
     }
     public static final class raw {
         public static final int noface=0x7f060000;
@@ -67,15 +104,15 @@ public final class R {
         public static final int pass=0x7f060002;
     }
     public static final class string {
-        public static final int action_settings=0x7f080002;
-        public static final int app_name=0x7f080000;
-        public static final int fazhi=0x7f080005;
-        public static final int hello_world=0x7f080001;
-        public static final int shihouscsj=0x7f080007;
-        public static final int tip_idcard=0x7f080008;
-        public static final int xiancz=0x7f080003;
-        public static final int xulehao=0x7f080006;
-        public static final int zhengjz=0x7f080004;
+        public static final int action_settings=0x7f090002;
+        public static final int app_name=0x7f090000;
+        public static final int fazhi=0x7f090005;
+        public static final int hello_world=0x7f090001;
+        public static final int shihouscsj=0x7f090007;
+        public static final int tip_idcard=0x7f090008;
+        public static final int xiancz=0x7f090003;
+        public static final int xulehao=0x7f090006;
+        public static final int zhengjz=0x7f090004;
     }
     public static final class style {
         /** 
@@ -90,16 +127,20 @@ public final class R {
 
         
          */
-        public static final int AppBaseTheme=0x7f090000;
+        public static final int AppBaseTheme=0x7f0a0002;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f090001;
-        public static final int choice_dialog1=0x7f090003;
+        public static final int AppTheme=0x7f0a0003;
+        public static final int choice_dialog1=0x7f0a0005;
         /**  是否半透明 
          */
-        public static final int dialog_style=0x7f090002;
-        public static final int notitle=0x7f090004;
+        public static final int dialog_style=0x7f0a0004;
+        public static final int list_item_cell_seperator_layout=0x7f0a0001;
+        /**  Define the list items style begin 
+         */
+        public static final int list_item_seperator_layout=0x7f0a0000;
+        public static final int notitle=0x7f0a0006;
     }
     public static final class xml {
         public static final int device_filter=0x7f050000;

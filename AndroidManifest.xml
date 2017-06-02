@@ -53,6 +53,9 @@
         <activity android:name=".SettingActivity" >
         </activity>
         
+        <activity android:name=".SearchActivity" >
+        </activity>
+                
           <receiver
             android:name=".BootCompletedReceiver"
              >

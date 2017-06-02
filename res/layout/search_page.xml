@@ -1,0 +1,145 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical" >
+
+            <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal">"
+        
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:text="记录查询"
+                android:textSize="30sp" />
+            
+        <RelativeLayout
+            android:id="@+id/RelativeLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:gravity="right"
+            android:orientation="horizontal" >
+
+         <Button
+                     android:id="@+id/btnSearchBack"
+                     android:layout_width="128dp"
+                     android:layout_height="wrap_content"
+       
+                
+
+                     android:text="返回" />
+                </RelativeLayout> 
+         
+       
+</LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="姓名" />
+
+            <EditText
+                android:id="@+id/etSearchName"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:ems="10" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身份证" />
+
+            <EditText
+                android:id="@+id/etSearchIdCard"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:ems="10" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="时间：" />
+
+            <TextView
+                android:id="@+id/tvStartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="至" />
+
+            <TextView
+                android:id="@+id/tvEndDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <Button
+                android:id="@+id/btnSearch"
+                android:layout_width="128dp"
+                android:layout_height="wrap_content"
+                android:text="查询" />
+        </LinearLayout>
+
+            <View 
+        style="@style/list_item_seperator_layout" 
+        />
+    <include 
+        layout="@layout/item_header" 
+        />
+    <View 
+        style="@style/list_item_seperator_layout" 
+        />
+    <ListView 
+        android:id="@+id/listView"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        android:scrollingCache="true" 
+        android:cacheColorHint="#00000000"
+        android:fastScrollEnabled="true" 
+        android:focusable="true"
+        android:divider="@color/color_dark_grey" 
+        android:dividerHeight="1dip" 
+        />
+      
+     
+    </LinearLayout>
+
+</LinearLayout>

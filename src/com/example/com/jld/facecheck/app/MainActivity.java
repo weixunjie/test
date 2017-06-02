@@ -1,5 +1,6 @@
 package com.example.com.jld.facecheck.app;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import com.example.com.jld.facecheck.app.models.RecordInfo;
 import com.sam.sdticreader.WltDec;
 import com.sdt.Common;
 import com.sdt.Sdtapi;
@@ -58,6 +60,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -297,9 +300,81 @@ public class MainActivity extends Activity {
 		tvName = (TextView) this.findViewById(R.id.tvName);
 		
 		tvIdCar=(TextView) this.findViewById(R.id.tvIdCard);
-		readTread.start();
+		
+		
+
+
+		 RecordInfo recordInfo=new RecordInfo();
+		 recordInfo.setRec_address("33");
+		 recordInfo.setRec_birthday("12023-222-3");
+		 recordInfo.setRec_date(String.valueOf(System.currentTimeMillis()));
+
+		 recordInfo.setRec_idcard("3333");
+		 recordInfo.setRec_mz("han");
+		 recordInfo.setRec_name("wei");
+		 recordInfo.setRec_sex("nan");
+		 
+		 Resources res = getResources();
+	  Bitmap bmp = BitmapFactory.decodeResource(res, R.drawable.logo_big);
+		 
+	  
+	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+	    
+	  recordInfo.setRec_idcardimage(baos.toByteArray());	 
+	  recordInfo.setRec_realtimeimage(baos.toByteArray());
+		 
+		 RecordDbUtils
+		 ss=new RecordDbUtils(mContext);
+		
+		 
+		 ss.insert(recordInfo);
+		
+		 
+		 ImageView imageView1=(ImageView)findViewById(R.id.imageView1);
+		 imageView1.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				
+				inputTitleDialog();
+			}
+		});
+		 
+		//readTread.start();
 	}
 
+	
+	private void inputTitleDialog() {
+
+        final EditText inputServer = new EditText(this);
+       
+        inputServer.setFocusable(true);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请输入管理员密码:").setView(inputServer).setNegativeButton(
+                "取消", null);
+        builder.setPositiveButton("确认",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        String inputName = inputServer.getText().toString();
+                       // if (inputName.equals("123"))
+                       // {                                	
+                        	
+                        	
+                        	Intent intent = new Intent();
+                			intent.setClass(MainActivity.this, SearchActivity.class);
+                			startActivity(intent);
+
+                			finish();
+                       // }
+                    }
+                });
+        builder.show();
+    }
+	
 	
 	private void fileOfater()
 	{
@@ -336,7 +411,10 @@ public class MainActivity extends Activity {
 
 						if (!new File(Constants.sLicencePath).exists()) {
 							myHandler.sendEmptyMessage(1);
-						}
+						}					
+						
+				
+						
 						
 						myHandler.sendEmptyMessage(2);
 

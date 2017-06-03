@@ -124,6 +124,13 @@ public class MainActivity extends Activity {
 	private TextView tvName;
 	private TextView tvIdCar;
 	
+	
+	private TextView tvSex;
+	private TextView tvBrithday;
+	private TextView tvMz;
+
+	private TextView tvAddress;
+
 
 	/*
 	 * private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
@@ -161,11 +168,10 @@ public class MainActivity extends Activity {
 
 	}
 
-	private String xm = "魏屉灯";
-	private String xb = "男";
-	private String idcar = "445224198309285193";
 
-	private String csny = "198309";
+	
+	private RecordInfo currentReadInfo=new RecordInfo();
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +205,7 @@ public class MainActivity extends Activity {
 		mContext = this;
 
 		String tmpString = sharedPreferences.getString(
-				Constants.LicenseKeySPName, "");
+				Constants.SPLicenseKeySPName, "");
 
 		if (TextUtils.isEmpty(tmpString)) {
 			Constants.currentKey = Constants.DefaultKey;
@@ -212,7 +218,7 @@ public class MainActivity extends Activity {
 			return;
 		} else {
 			String isUpload = sharedPreferences.getString(
-					Constants.IsUploadToNetSPName, "0");
+					Constants.SPIsUploadToNetSPName, "0");
 
 			if (!TextUtils.isEmpty(isUpload) && isUpload.equals("1")) {
 
@@ -222,10 +228,23 @@ public class MainActivity extends Activity {
 			}
 
 			String strCompareVale = sharedPreferences.getString(
-					Constants.CompareValueSPName, "0.7");
+					Constants.SPCompareValueSPName, "0.7");
 			Constants.currentKey = tmpString;
 
 			Constants.currentCompareValue = 0.7;
+			
+
+			String tmp = sharedPreferences.getString(
+					Constants.SPAdminPassword, "123");
+			
+			Constants.currentAdminPassword=tmp;
+			
+			tmp = sharedPreferences.getString(
+					Constants.SPUploadUserCode, "adin");
+			
+			Constants.currentUploadUserKeyString=tmp;
+			
+			
 			try {
 
 				Constants.currentCompareValue = Double.valueOf(strCompareVale);
@@ -302,17 +321,32 @@ public class MainActivity extends Activity {
 		tvIdCar=(TextView) this.findViewById(R.id.tvIdCard);
 		
 		
+tvAddress=(TextView) this.findViewById(R.id.tvAdresss);
+		
+		
+		tvMz=(TextView) this.findViewById(R.id.tvMz);
+		
+		
+		tvBrithday=(TextView) this.findViewById(R.id.tvBirthday);
+		
+		
+		
+		tvSex=(TextView) this.findViewById(R.id.tvSex);
+		
+		
 
 
 		 RecordInfo recordInfo=new RecordInfo();
 		 recordInfo.setRec_address("33");
-		 recordInfo.setRec_birthday("12023-222-3");
+		 recordInfo.setRec_birthday("1203-222-3");
 		 recordInfo.setRec_date(String.valueOf(System.currentTimeMillis()));
 
-		 recordInfo.setRec_idcard("3333");
-		 recordInfo.setRec_mz("han");
-		 recordInfo.setRec_name("wei");
-		 recordInfo.setRec_sex("nan");
+		 recordInfo.setRec_idcard("452243425344534522");
+		 recordInfo.setRec_mz("岽组");
+		 recordInfo.setRec_name("魏巽灯");
+		 recordInfo.setRec_sex("女");
+		 
+		 recordInfo.setRec_address("方江要要有尖有硝尖肖323灌顶地水士大夫械2342332342343242");
 		 
 		 Resources res = getResources();
 	  Bitmap bmp = BitmapFactory.decodeResource(res, R.drawable.logo_big);
@@ -360,16 +394,14 @@ public class MainActivity extends Activity {
 
                     public void onClick(DialogInterface dialog, int which) {
                         String inputName = inputServer.getText().toString();
-                       // if (inputName.equals("123"))
-                       // {                                	
-                        	
-                        	
+                       if (inputName.equals(Constants.currentAdminPassword))
+                        {  
                         	Intent intent = new Intent();
                 			intent.setClass(MainActivity.this, SearchActivity.class);
                 			startActivity(intent);
 
                 			finish();
-                       // }
+                       }
                     }
                 });
         builder.show();
@@ -489,7 +521,7 @@ public class MainActivity extends Activity {
 
 			// playVoice("s");
 			// playVoice("pass.wav");
-			uploadRec(xm, xb, idcar, csny);
+			uploadRec(currentReadInfo.getRec_name(), currentReadInfo.getRec_sex(), currentReadInfo.getRec_idcard(), currentReadInfo.getRec_birthday());
 		}
 
 	}
@@ -534,7 +566,7 @@ public class MainActivity extends Activity {
 
 		rpc.addProperty("inout", "");
 
-		rpc.addProperty("customTransferCode", "SEQ65290120170402278742");
+		rpc.addProperty("customTransferCode", Constants.currentUploadUserKeyString);
 
 		// 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
@@ -587,14 +619,14 @@ public class MainActivity extends Activity {
 
 			if (!TextUtils.isEmpty(rn)) {
 				if (rn.indexOf("成功") >= 0) {
-					tvRn.setText("比对成功,数据已上传!");
+					tvRn.setText("比对成功,数据已上传.");
 				} else {
-					tvRn.setText("比对成功,数据上传失败!");
+					tvRn.setText("比对成功,数据上传失败.");
 				}
 			} else
 
 			{
-				tvRn.setText("比对成功,数据上传超时!");
+				tvRn.setText("比对成功,数据上传超时.");
 
 			}
 
@@ -613,14 +645,28 @@ public class MainActivity extends Activity {
 
 			ivImageNow.setImageBitmap(bmp);
 			
+			setTvValues();
+   
 			
-
-			tvName.setText("姓名:");
-			tvIdCar.setText("身份证:");
 
 		}
 	};
 
+	private void setTvValues()
+	{
+
+		tvName.setText("");
+		tvIdCar.setText("");
+		
+		tvName.setText("");
+		tvIdCar.setText("");
+		tvAddress.setText("");
+		
+		tvSex.setText("");
+		tvBrithday.setText("");
+		
+		tvMz.setText("");
+	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -664,11 +710,20 @@ public class MainActivity extends Activity {
 										+ cardmsg.useful_e_date_month + "-"
 										+ cardmsg.useful_e_date_day + '\n';
 
-								idcar = cardmsg.id_num;
-								xm = cardmsg.name;
-								xb = cardmsg.sex;
-								csny = cardmsg.birth_year + cardmsg.birth_month
-										+ cardmsg.birth_day;
+								
+								currentReadInfo=new RecordInfo();
+								currentReadInfo.setRec_idcard( cardmsg.id_num);
+								currentReadInfo.setRec_name(cardmsg.name);
+								currentReadInfo.setRec_sex(cardmsg.sex);
+								currentReadInfo.setRec_sex( cardmsg.birth_year + cardmsg.birth_month
+										+ cardmsg.birth_day);
+								
+								currentReadInfo.setRec_address(cardmsg.address);
+								
+								currentReadInfo.setRec_mz(cardmsg.nation_str);
+								
+								
+								
 								byte[] bm = cardmsg.ptoto;
 								WltDec dec = new WltDec();
 								byte[] bip = dec.decodeToBitmap(bm);
@@ -713,8 +768,14 @@ public class MainActivity extends Activity {
 					byteIdCard.length);
 			ivIdCard.setImageBitmap(bmp(bp));
 
-			tvName.setText("姓名:"+xm);
-			tvIdCar.setText("身份证:"+idcar);
+			tvName.setText(currentReadInfo.getRec_name());
+			tvIdCar.setText(currentReadInfo.getRec_idcard());
+			tvAddress.setText(currentReadInfo.getRec_address());
+			
+			tvSex.setText(currentReadInfo.getRec_sex());
+			tvBrithday.setText(currentReadInfo.getRec_birthday());
+			
+			tvMz.setText(currentReadInfo.getRec_mz());
 			
 			if (byteFace != null) {
 
@@ -822,8 +883,26 @@ public class MainActivity extends Activity {
 						playVoice(R.raw.pass);
 						emptyImgBox();
 					}
+			
+					
+					RecordDbUtils recordDbUtils=new RecordDbUtils(mContext);
+					
+			
+					currentReadInfo.setRec_date(String.valueOf(System.currentTimeMillis()));
+					
+				
+					currentReadInfo.setRec_idcardimage(byteIdCard);
+				
+					
+					currentReadInfo.setRec_realtimeimage(byteFace);
+			
+					
+					recordDbUtils.insert(currentReadInfo);
+					
 					byteFace = null;
 					byteIdCard = null;
+					
+					
 					return;
 				} else {
 					// return false;

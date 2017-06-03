@@ -7,7 +7,7 @@
     <TableLayout
         android:id="@+id/stock_list_item_table_layout"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:stretchColumns="3" >
 
         <TableRow
@@ -18,17 +18,17 @@
                 style="@style/list_item_cell_seperator_layout" 
                 />
             <TextView 
-                android:id="@+id/stock_code" 
-                android:layout_width="60dip"
-                       android:layout_height="100dp"
+                android:id="@+id/tvItemRecDate" 
+                android:layout_width="160dip"
+                       android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="2dip" />
             <View 
                 style="@style/list_item_cell_seperator_layout" 
                 />
             <TextView 
-                android:id="@+id/stock_symbol"
-                android:layout_width="1dip" 
+                android:id="@+id/tvItemName"
+             android:layout_width="80dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" 
                 android:padding="2dip" 
@@ -36,18 +36,8 @@
             <View 
                 style="@style/list_item_cell_seperator_layout" 
                 />
-            <TextView android:id="@+id/stock_last_price"
-                android:layout_width="60dip" 
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" 
-                android:padding="2dip" 
-                />
-            <View 
-                style="@style/list_item_cell_seperator_layout" 
-                />
-            <TextView 
-                android:id="@+id/stock_change_price"
-                android:layout_width="50dip" 
+            <TextView android:id="@+id/tvItemSex"
+                android:layout_width="60dp" 
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" 
                 android:padding="2dip" 
@@ -56,8 +46,29 @@
                 style="@style/list_item_cell_seperator_layout" 
                 />
             <TextView 
-                android:id="@+id/stock_change_percentage"
-                android:layout_width="50dip" 
+                android:id="@+id/tvItemMZ"
+                android:layout_width="50dp" 
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" 
+                android:padding="2dip" 
+                />
+            <View 
+                style="@style/list_item_cell_seperator_layout" 
+                />
+            <TextView 
+                android:id="@+id/tvItemBirthday"
+                android:layout_width="80dip" 
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" 
+                android:padding="2dip" 
+                />
+            <View 
+                style="@style/list_item_cell_seperator_layout" 
+                />
+            
+              <TextView 
+                android:id="@+id/tvItemIdCad"
+                android:layout_width="150dip" 
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" 
                 android:padding="2dip" 

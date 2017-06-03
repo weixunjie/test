@@ -53,25 +53,38 @@ public class SettingActivity extends Activity {
 	private CheckBox cbetSettingIsUpload;
 	private EditText etSettingCompareValue;
 
-	private SharedPreferences sharedPreferences =null;
+	private EditText etSettingUploadCode;
+
+
+	private EditText etSettingAmindPwd;
+
+	private SharedPreferences sharedPreferences = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 
-		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		/* set it to be full screen */
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
+
 		setContentView(R.layout.activity_setting);
 
-		
-		sharedPreferences = getSharedPreferences(
-				"jdlfaceapp", Context.MODE_PRIVATE); // 私有数据
-		
+		sharedPreferences = getSharedPreferences("jdlfaceapp",
+				Context.MODE_PRIVATE); // 私有数据
+
 		etSettingLicence = (EditText) this.findViewById(R.id.etSettingLicence);
+
+		etSettingAmindPwd = (EditText) this
+				.findViewById(R.id.etSettingAdminPwd);
+
+		etSettingUploadCode = (EditText) this
+				.findViewById(R.id.etSettingUPloadCode);
+
+		etSettingAmindPwd = (EditText) this
+				.findViewById(R.id.etSettingAdminPwd);
 
 		cbetSettingIsUpload = (CheckBox) this
 				.findViewById(R.id.cbetSettingIsUpload);
@@ -80,7 +93,7 @@ public class SettingActivity extends Activity {
 				.findViewById(R.id.etSettingCompareValue);
 
 		String isUpload = sharedPreferences.getString(
-				Constants.IsUploadToNetSPName, "0");
+				Constants.SPIsUploadToNetSPName, "0");
 
 		if (!TextUtils.isEmpty(isUpload) && isUpload.equals("1")) {
 
@@ -90,10 +103,21 @@ public class SettingActivity extends Activity {
 		}
 
 		String strCompareVale = sharedPreferences.getString(
-				Constants.CompareValueSPName, "0.7");
+				Constants.SPCompareValueSPName, "0.7");
 		etSettingCompareValue.setText(strCompareVale);
 
-		String key = sharedPreferences.getString(Constants.LicenseKeySPName,
+		String tmp = sharedPreferences.getString(Constants.SPUploadUserCode,
+				"SEQ65290120170402278742");
+		etSettingUploadCode.setText(tmp);
+		
+		
+		 tmp = sharedPreferences.getString(Constants.SPAdminPassword,
+				"123");
+		etSettingAmindPwd.setText(tmp);
+		
+		
+
+		String key = sharedPreferences.getString(Constants.SPLicenseKeySPName,
 				Constants.DefaultKey);
 		etSettingLicence.setText(key);
 
@@ -106,15 +130,31 @@ public class SettingActivity extends Activity {
 				String strCbCheck = cbetSettingIsUpload.isChecked() ? "1" : "0";
 
 				Editor editor = sharedPreferences.edit();
-				editor.putString(Constants.IsUploadToNetSPName, strCbCheck);
+				editor.putString(Constants.SPIsUploadToNetSPName, strCbCheck);
 
-				editor.putString(Constants.CompareValueSPName,
+				editor.putString(Constants.SPCompareValueSPName,
 						etSettingCompareValue.getText().toString());
 
-				editor.putString(Constants.LicenseKeySPName,
-						etSettingLicence.getText().toString());
+				editor.putString(Constants.SPLicenseKeySPName, etSettingLicence
+						.getText().toString());
 				
-				Constants.currentKey=etSettingLicence.getText().toString();
+				
+
+				editor.putString(Constants.SPUploadUserCode, etSettingUploadCode
+						.getText().toString());
+
+				
+
+				editor.putString(Constants.SPAdminPassword, etSettingAmindPwd
+						.getText().toString());
+
+				
+
+				Constants.currentKey = etSettingLicence.getText().toString();
+				
+				Constants.currentAdminPassword = etSettingAmindPwd.getText().toString();
+				
+				Constants.currentUploadUserKeyString = etSettingUploadCode.getText().toString();
 
 				editor.commit();
 

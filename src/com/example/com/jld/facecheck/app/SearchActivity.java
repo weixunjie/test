@@ -85,7 +85,7 @@ public class SearchActivity extends Activity {
 	private int year, month, day;
 
 	private TextView tvSearchPopName;
-	private TextView tvSearhPopIdCar;
+	private TextView tvSearhPopAddress;
 
 	private ImageView ivSearhPopIdCard;
 
@@ -115,7 +115,7 @@ public class SearchActivity extends Activity {
 				R.layout.searchpopup, null);
 
 		builder = new AlertDialog.Builder(mContext);
-		builder.setTitle("详情:").setView(mView).setNegativeButton("关闭", null);
+		builder.setTitle(null).setView(mView).setNegativeButton("关闭", null);
 
 		etRecName = (EditText) this.findViewById(R.id.etSearchName);
 
@@ -128,9 +128,9 @@ public class SearchActivity extends Activity {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-		tvStartTime.setText(sdf.format(dt) + " 00:00:00");
+		tvStartTime.setText(sdf.format(dt) + " 00:00");
 
-		tvEndTime.setText(sdf.format(dt) + " 23:59:59");
+		tvEndTime.setText(sdf.format(dt) + " 23:59");
 
 		Button btnBackButton = (Button) this.findViewById(R.id.btnSearchBack);
 		btnBackButton.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +157,7 @@ public class SearchActivity extends Activity {
 					public void onDateSet(DatePicker arg0, int year, int month,
 							int day) {
 						tvStartTime.setText(year + "-" + (++month) + "-" + day
-								+ " 00:00:00"); // 将选择的日期显示到TextView中,因为之前获取month直接使用，所以不需要+1，这个地方需要显示，所以+1
+								+ " 00:00"); // 将选择的日期显示到TextView中,因为之前获取month直接使用，所以不需要+1，这个地方需要显示，所以+1
 					}
 				};
 
@@ -165,7 +165,7 @@ public class SearchActivity extends Activity {
 						"yyyy-MM-dd HH:mm:ss");
 
 				try {
-					Date date = sdf.parse(tvStartTime.getText().toString());
+					Date date = sdf.parse(tvStartTime.getText().toString()+":00");
 
 					DatePickerDialog dialog = new DatePickerDialog(
 							SearchActivity.this, 0, listener,
@@ -194,7 +194,7 @@ public class SearchActivity extends Activity {
 					public void onDateSet(DatePicker arg0, int year, int month,
 							int day) {
 						tvEndTime.setText(year + "-" + (++month) + "-" + day
-								+ " 23:59:59"); // 将选择的日期显示到TextView中,因为之前获取month直接使用，所以不需要+1，这个地方需要显示，所以+1
+								+ " 23:59"); // 将选择的日期显示到TextView中,因为之前获取month直接使用，所以不需要+1，这个地方需要显示，所以+1
 					}
 				};
 
@@ -202,7 +202,7 @@ public class SearchActivity extends Activity {
 						"yyyy-MM-dd HH:mm:ss");// 小写的mm表示的是分钟
 
 				try {
-					Date date = sdf.parse(tvEndTime.getText().toString());
+					Date date = sdf.parse(tvEndTime.getText().toString()+":59");
 
 					DatePickerDialog dialog = new DatePickerDialog(
 							SearchActivity.this, 0, listener,
@@ -238,7 +238,7 @@ public class SearchActivity extends Activity {
 
 				long starttime = 0;
 				try {
-					starttime = sdf.parse(tvStartTime.getText().toString())
+					starttime = sdf.parse(tvStartTime.getText().toString()+":00")
 							.getTime();
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -247,7 +247,7 @@ public class SearchActivity extends Activity {
 				long endtime = 0;
 
 				try {
-					endtime = sdf.parse(tvEndTime.getText().toString())
+					endtime = sdf.parse(tvEndTime.getText().toString()+":59")
 							.getTime();
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -269,6 +269,8 @@ public class SearchActivity extends Activity {
 						Map<String, Object> listem = new HashMap<String, Object>();
 						info.setRec_name(
 
+							
+								
 						cursor.getString(
 								cursor.getColumnIndex(RecordDbUtils.REC_NAME))
 								.toString());
@@ -285,6 +287,16 @@ public class SearchActivity extends Activity {
 						info.setRec_realtimeimage(cursor.getBlob(cursor
 								.getColumnIndex(RecordDbUtils.REC_REALTIMEIMG)));
 
+						info.setRec_date(cursor.getString(cursor
+								.getColumnIndex(RecordDbUtils.REC_DATE)));
+						
+						info.setRec_mz(cursor.getString(cursor
+								.getColumnIndex(RecordDbUtils.REC_MZ)));
+						
+						info.setRec_sex(cursor.getString(cursor
+								.getColumnIndex(RecordDbUtils.REC_SEX)));
+						info.setRec_address(cursor.getString(cursor
+								.getColumnIndex(RecordDbUtils.REC_ADDRESS)));
 						recordInfos.add(info);
 						cursor.moveToNext();
 					}
@@ -298,7 +310,7 @@ public class SearchActivity extends Activity {
 				// RecordDbUtils.REC_IDCARD, RecordDbUtils.REC_MZ },
 				// new int[] { R.id.rec_name, R.id.rec_idcard, R.id.rec_mz });
 
-				StockListAdapter listViewAdpater = new StockListAdapter(mContext,
+				RecordListAdapter listViewAdpater = new RecordListAdapter(mContext,
 						recordInfos);
 
 				listView.setAdapter(listViewAdpater);
@@ -323,8 +335,8 @@ public class SearchActivity extends Activity {
 			tvSearchPopName = (TextView) mView
 					.findViewById(R.id.tvSearchPopName);
 
-			tvSearhPopIdCar = (TextView) mView
-					.findViewById(R.id.tvSearhPopIdCar);
+			tvSearhPopAddress = (TextView) mView
+					.findViewById(R.id.tvSearhPopAddress);
 
 			ivSearhPopIdCard = (ImageView) mView
 					.findViewById(R.id.ivSearhPopIdCard);
@@ -332,10 +344,10 @@ public class SearchActivity extends Activity {
 			ivSearhRealTime = (ImageView) mView
 					.findViewById(R.id.ivSearhRealTime);
 
-			tvSearhPopIdCar.setText("sdf");
+			tvSearhPopAddress.setText(recordInfo.getRec_address());
 
 			tvSearchPopName
-					.setText(recordInfo.getRec_mz());
+					.setText(recordInfo.getRec_name());
 
 			byte[] tmpBytes = recordInfo.getRec_idcardimage();
 
